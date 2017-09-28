@@ -13,7 +13,7 @@ from spotlight.sequence.implicit import ImplicitSequenceModel
 from spotlight.sequence.representations import LSTMNet
 from spotlight.evaluation import sequence_mrr_score
 
-from gaussian.representation import GaussianLSTMNet, GaussianKLLSTMNet
+from gaussian.representation import GaussianLSTMNet, GaussianKLLSTMNet, MixtureLSTMNet
 
 
 CUDA = torch.cuda.is_available()
@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     random_state = np.random.RandomState(42)
 
-    train_nonsequence, train, validation, test = load_data('1M', random_state)
+    train_nonsequence, train, validation, test = load_data('100K', random_state)
 
     # model = ImplicitSequenceModel(loss=loss,
     #                               representation='pooling',
@@ -105,17 +105,18 @@ if __name__ == '__main__':
              'n_iter': 5.0}
 
     hyper = {'batch_size': 80.0,
-             'embedding_dim': 42.0,
+             'embedding_dim': 32.0,
              'l2': 0 * 5.645943698793739e-05,
-             'learning_rate': 0.004822533874727729,
+             'learning_rate': 0.04822533874727729,
              'loss': 'adaptive_hinge',
-             'n_iter': 16.0,
+             'n_iter': 3.0,
              'type': 'gaussian_kl'}
 
-    representation = GaussianKLLSTMNet(train.num_items,
-                                       embedding_dim=int(hyper['embedding_dim']))
-    # representation = LSTMNet(train.num_items,
-    #                          embedding_dim=int(hyper['embedding_dim']))
+    # representation = GaussianKLLSTMNet(train.num_items,
+                                       # embedding_dim=int(hyper['embedding_dim']))
+    representation = MixtureLSTMNet(train.num_items,
+                                    num_components=4,
+                                    embedding_dim=int(hyper['embedding_dim']))
     model = ImplicitSequenceModel(loss=hyper['loss'],
                                   batch_size=int(hyper['batch_size']),
                                   representation=representation,
@@ -128,8 +129,5 @@ if __name__ == '__main__':
 
     representation.train(False)
     test_mrr = _evaluate(model, test)
-    print('Test mu {}'.format(test_mrr))
+    print('Test MRR {}'.format(test_mrr))
 
-    representation.train(True)
-    test_mrr = _evaluate(model, test)
-    print('Test mu sigma {}'.format(test_mrr))

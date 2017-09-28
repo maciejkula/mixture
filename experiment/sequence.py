@@ -5,6 +5,7 @@ import numpy as np
 import torch
 
 from spotlight.datasets.movielens import get_movielens_dataset
+from spotlight.datasets.goodbooks import get_goodbooks_dataset
 from spotlight.cross_validation import user_based_train_test_split
 
 from gaussian.sequence import get_objective, hyperparameter_space
@@ -17,7 +18,10 @@ CUDA = torch.cuda.is_available()
 
 def load_data(dataset, random_state):
 
-    dataset = get_movielens_dataset(dataset)
+    if 'goodbooks' in dataset:
+        dataset = get_goodbooks_dataset()
+    else:
+        dataset = get_movielens_dataset(dataset)
 
     max_sequence_length = 100
     min_sequence_length = 20
@@ -59,6 +63,8 @@ if __name__ == '__main__':
     random_state = np.random.RandomState(42)
 
     train_nonsequence, train, validation, test = load_data(args.dataset, random_state)
+
+    print('Data {}'.format(train))
 
     objective = get_objective(train_nonsequence, train, validation, test)
     space = hyperparameter_space()

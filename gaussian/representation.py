@@ -19,6 +19,14 @@ from spotlight.layers import ScaledEmbedding, ZeroEmbedding
 PADDING_IDX = 0
 
 
+def softmax(x, dim):
+
+    numerator = torch.exp(x)
+    denominator = numerator.sum(dim, keepdim=True).expand_as(numerator)
+
+    return numerator / denominator
+
+
 def gaussian_kl_divergence(x_mu, x_sigma_sq, y_mu, y_sigma_sq):
 
     x_sigma = torch.sqrt(x_sigma_sq)
@@ -339,6 +347,254 @@ class GaussianKLLSTMNet(nn.Module):
                 .squeeze())
 
         dot = ((user_representations * target_embedding.squeeze())
+               .sum(1)
+               .squeeze())
+
+        return target_bias + dot
+
+
+class LSTMNet(nn.Module):
+    """
+    Module representing users through running a recurrent neural network
+    over the sequence, using the hidden state at each timestep as the
+    sequence representation, a'la [2]_
+
+    During training, representations for all timesteps of the sequence are
+    computed in one go. Loss functions using the outputs will therefore
+    be aggregating both across the minibatch and aross time in the sequence.
+
+    Parameters
+    ----------
+
+    num_items: int
+        Number of items to be represented.
+    embedding_dim: int, optional
+        Embedding dimension of the embedding layer, and the number of hidden
+        units in the LSTM layer.
+    item_embedding_layer: an embedding layer, optional
+        If supplied, will be used as the item embedding layer
+        of the network.
+
+    References
+    ----------
+
+    .. [2] Hidasi, Balazs, et al. "Session-based recommendations with
+       recurrent neural networks." arXiv preprint arXiv:1511.06939 (2015).
+    """
+
+    def __init__(self, num_items, embedding_dim=32,
+                 item_embedding_layer=None, sparse=False):
+
+        super(LSTMNet, self).__init__()
+
+        self.embedding_dim = embedding_dim
+
+        if item_embedding_layer is not None:
+            self.item_embeddings = item_embedding_layer
+        else:
+            self.item_embeddings = ScaledEmbedding(num_items, embedding_dim,
+                                                   padding_idx=PADDING_IDX,
+                                                   sparse=sparse)
+
+        self.item_biases = ZeroEmbedding(num_items, 1, sparse=sparse,
+                                         padding_idx=PADDING_IDX)
+
+        self.lstm = nn.LSTM(batch_first=True,
+                            input_size=embedding_dim,
+                            hidden_size=embedding_dim)
+
+    def user_representation(self, item_sequences):
+        """
+        Compute user representation from a given sequence.
+
+        Returns
+        -------
+
+        tuple (all_representations, final_representation)
+            The first element contains all representations from step
+            -1 (no items seen) to t - 1 (all but the last items seen).
+            The second element contains the final representation
+            at step t (all items seen). This final state can be used
+            for prediction or evaluation.
+        """
+
+        # Make the embedding dimension the channel dimension
+        sequence_embeddings = (self.item_embeddings(item_sequences)
+                               .permute(0, 2, 1))
+        # Add a trailing dimension of 1
+        sequence_embeddings = (sequence_embeddings
+                               .unsqueeze(3))
+        # Pad it with zeros from left
+        sequence_embeddings = (F.pad(sequence_embeddings,
+                                     (0, 0, 1, 0))
+                               .squeeze(3))
+        sequence_embeddings = sequence_embeddings.permute(0, 2, 1)
+
+        user_representations, _ = self.lstm(sequence_embeddings)
+        user_representations = user_representations.permute(0, 2, 1)
+
+        return user_representations[:, :, :-1], user_representations[:, :, -1]
+
+    def forward(self, user_representations, targets):
+        """
+        Compute predictions for target items given user representations.
+
+        Parameters
+        ----------
+
+        user_representations: tensor
+            Result of the user_representation_method.
+        targets: tensor
+            A minibatch of item sequences of shape
+            (minibatch_size, sequence_length).
+
+        Returns
+        -------
+
+        predictions: tensor
+            of shape (minibatch_size, sequence_length)
+        """
+
+        target_embedding = (self.item_embeddings(targets)
+                            .permute(0, 2, 1)
+                            .squeeze())
+        target_bias = self.item_biases(targets).squeeze()
+
+        dot = ((user_representations * target_embedding)
+               .sum(1)
+               .squeeze())
+
+        return target_bias + dot
+
+
+class MixtureLSTMNet(nn.Module):
+    """
+    Module representing users through running a recurrent neural network
+    over the sequence, using the hidden state at each timestep as the
+    sequence representation, a'la [2]_
+
+    During training, representations for all timesteps of the sequence are
+    computed in one go. Loss functions using the outputs will therefore
+    be aggregating both across the minibatch and aross time in the sequence.
+
+    Parameters
+    ----------
+
+    num_items: int
+        Number of items to be represented.
+    embedding_dim: int, optional
+        Embedding dimension of the embedding layer, and the number of hidden
+        units in the LSTM layer.
+    item_embedding_layer: an embedding layer, optional
+        If supplied, will be used as the item embedding layer
+        of the network.
+
+    References
+    ----------
+
+    .. [2] Hidasi, Balazs, et al. "Session-based recommendations with
+       recurrent neural networks." arXiv preprint arXiv:1511.06939 (2015).
+    """
+
+    def __init__(self, num_items, embedding_dim=32,
+                 num_components=4,
+                 item_embedding_layer=None, sparse=False):
+
+        super(MixtureLSTMNet, self).__init__()
+
+        self.embedding_dim = embedding_dim
+        self.num_components = num_components
+
+        if item_embedding_layer is not None:
+            self.item_embeddings = item_embedding_layer
+        else:
+            self.item_embeddings = ScaledEmbedding(num_items, embedding_dim,
+                                                   padding_idx=PADDING_IDX,
+                                                   sparse=sparse)
+
+        self.item_biases = ZeroEmbedding(num_items, 1, sparse=sparse,
+                                         padding_idx=PADDING_IDX)
+
+        self.lstm = nn.LSTM(batch_first=True,
+                            input_size=embedding_dim,
+                            hidden_size=embedding_dim * (self.num_components * 2))
+
+    def user_representation(self, item_sequences):
+        """
+        Compute user representation from a given sequence.
+
+        Returns
+        -------
+
+        tuple (all_representations, final_representation)
+            The first element contains all representations from step
+            -1 (no items seen) to t - 1 (all but the last items seen).
+            The second element contains the final representation
+            at step t (all items seen). This final state can be used
+            for prediction or evaluation.
+        """
+
+        batch_size, sequence_length = item_sequences.size()
+
+        # Make the embedding dimension the channel dimension
+        sequence_embeddings = (self.item_embeddings(item_sequences)
+                               .permute(0, 2, 1))
+        # Add a trailing dimension of 1
+        sequence_embeddings = (sequence_embeddings
+                               .unsqueeze(3))
+        # Pad it with zeros from left
+        sequence_embeddings = (F.pad(sequence_embeddings,
+                                     (0, 0, 1, 0))
+                               .squeeze(3))
+        sequence_embeddings = sequence_embeddings
+        sequence_embeddings = sequence_embeddings.permute(0, 2, 1)
+
+        user_representations, _ = self.lstm(sequence_embeddings)
+        user_representations = user_representations.resize(batch_size,
+                                                           sequence_length + 1,
+                                                           self.num_components * 2,
+                                                           self.embedding_dim)
+        user_representations = user_representations.permute(0, 2, 3, 1)
+
+        return user_representations[:, :, :, :-1], user_representations[:, :, :, -1:]
+
+    def forward(self, user_representations, targets):
+        """
+        Compute predictions for target items given user representations.
+
+        Parameters
+        ----------
+
+        user_representations: tensor
+            Result of the user_representation_method.
+        targets: tensor
+            A minibatch of item sequences of shape
+            (minibatch_size, sequence_length).
+
+        Returns
+        -------
+
+        predictions: tensor
+            of shape (minibatch_size, sequence_length)
+        """
+
+        user_components = user_representations[:, :self.num_components, :, :]
+        mixture_vectors = user_representations[:, self.num_components:, :, :]
+
+        target_embedding = (self.item_embeddings(targets)
+                            .permute(0, 2, 1))
+        target_bias = self.item_biases(targets).squeeze()
+
+        mixture_weights = (mixture_vectors * target_embedding
+                           .unsqueeze(1)
+                           .expand_as(user_components))
+        mixture_weights = (softmax(mixture_weights.sum(2), 1)
+                           .unsqueeze(2)
+                           .expand_as(user_components))
+        # print(mixture_weights[0, :, 0, 99])
+        weighted_user_representations = (mixture_weights * user_components).sum(1)
+
+        dot = ((weighted_user_representations * target_embedding)
                .sum(1)
                .squeeze())
 
