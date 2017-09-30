@@ -10,7 +10,10 @@ from spotlight.evaluation import sequence_mrr_score
 from spotlight.sequence.implicit import ImplicitSequenceModel
 from spotlight.sequence.representations import PoolNet, LSTMNet
 
-from gaussian.representation import GaussianLSTMNet, GaussianKLLSTMNet, MixtureLSTMNet
+from gaussian.representation import (GaussianLSTMNet,
+                                     GaussianKLLSTMNet,
+                                     MixtureLSTMNet,
+                                     Mixture2LSTMNet)
 
 
 CUDA = torch.cuda.is_available()
@@ -20,10 +23,11 @@ def hyperparameter_space():
 
     common_space = {
         'batch_size': hp.quniform('batch_size', 64, 128, 16),
-        'learning_rate': hp.loguniform('learning_rate', -6, -2),
+        'learning_rate': hp.loguniform('learning_rate', -6, -3),
         'l2': hp.loguniform('l2', -25, -9),
-        'embedding_dim': 128,
-        'n_iter': hp.quniform('n_iter', 5, 30, 5),
+        'embedding_dim': 64,
+        'num_components': hp.quniform('num_components', 2, 8, 2),
+        'n_iter': hp.quniform('n_iter', 5, 50, 5),
         'loss': hp.choice('loss', ['adaptive_hinge'])
     }
 
@@ -33,13 +37,16 @@ def hyperparameter_space():
             #     'type': 'pooling',
             #     **common_space,
             # },
-            # {
-            #     'type': 'lstm',
-            #     **common_space
-            # },
+            {
+                'type': 'lstm',
+                **common_space
+            },
             {
                 'type': 'mixture',
-                'num_components': hp.quniform('num_components', 2, 4, 2),
+                **common_space
+            },
+            {
+                'type': 'mixture2',
                 **common_space
             },
             # {
@@ -80,10 +87,16 @@ def get_objective(train_nonsequence, train, validation, test):
                                                embedding_dim=int(h['embedding_dim']))
         elif h['type'] == 'mixture':
             num_components = int(h['num_components'])
-            embedding_dim = int(h['embedding_dim']) #// (num_components * 2)
+            embedding_dim = int(h['embedding_dim'])
             representation = MixtureLSTMNet(train.num_items,
                                             num_components=num_components,
                                             embedding_dim=embedding_dim)
+        elif h['type'] == 'mixture2':
+            num_components = int(h['num_components'])
+            embedding_dim = int(h['embedding_dim'])
+            representation = Mixture2LSTMNet(train.num_items,
+                                             num_components=num_components,
+                                             embedding_dim=embedding_dim)
 
         model = ImplicitSequenceModel(
             batch_size=int(h['batch_size']),

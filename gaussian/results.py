@@ -8,7 +8,7 @@ def _get_type(trial):
 
 def summarize_trials(trials):
 
-    for model_type in ('pooling', 'lstm', 'gaussian', 'gaussian_kl', 'mixture'):
+    for model_type in ('pooling', 'lstm', 'gaussian', 'gaussian_kl', 'mixture', 'mixture2'):
         results = [x for x in trials.trials if _get_type(x) == model_type]
         results = sorted(results, key=lambda x: x['result']['loss'])
 
