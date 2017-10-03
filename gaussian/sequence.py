@@ -13,7 +13,8 @@ from spotlight.sequence.representations import PoolNet, LSTMNet
 from gaussian.representation import (GaussianLSTMNet,
                                      GaussianKLLSTMNet,
                                      MixtureLSTMNet,
-                                     Mixture2LSTMNet)
+                                     Mixture2LSTMNet,
+                                     LinearMixtureLSTMNet)
 
 
 CUDA = torch.cuda.is_available()
@@ -45,8 +46,12 @@ def hyperparameter_space():
                 'type': 'mixture',
                 **common_space
             },
+            # {
+            #     'type': 'mixture2',
+            #     **common_space
+            # },
             {
-                'type': 'mixture2',
+                'type': 'linear_mixture',
                 **common_space
             },
             # {
@@ -97,6 +102,14 @@ def get_objective(train_nonsequence, train, validation, test):
             representation = Mixture2LSTMNet(train.num_items,
                                              num_components=num_components,
                                              embedding_dim=embedding_dim)
+        elif h['type'] == 'linear_mixture':
+            num_components = int(h['num_components'])
+            embedding_dim = int(h['embedding_dim'])
+            representation = LinearMixtureLSTMNet(train.num_items,
+                                                  num_components=num_components,
+                                                  embedding_dim=embedding_dim)
+        else:
+            raise ValueError('Unknown model type')
 
         model = ImplicitSequenceModel(
             batch_size=int(h['batch_size']),

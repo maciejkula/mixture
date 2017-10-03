@@ -16,7 +16,8 @@ from spotlight.evaluation import sequence_mrr_score
 from gaussian.representation import (GaussianLSTMNet,
                                      GaussianKLLSTMNet,
                                      MixtureLSTMNet,
-                                     Mixture2LSTMNet)
+                                     Mixture2LSTMNet,
+                                     LinearMixtureLSTMNet)
 
 
 CUDA = torch.cuda.is_available()
@@ -117,9 +118,9 @@ if __name__ == '__main__':
 
     # representation = GaussianKLLSTMNet(train.num_items,
                                        # embedding_dim=int(hyper['embedding_dim']))
-    representation = Mixture2LSTMNet(train.num_items,
-                                    num_components=4,
-                                    embedding_dim=int(hyper['embedding_dim']))
+    representation = LinearMixtureLSTMNet(train.num_items,
+                                          num_components=4,
+                                          embedding_dim=int(hyper['embedding_dim']))
     model = ImplicitSequenceModel(loss=hyper['loss'],
                                   batch_size=int(hyper['batch_size']),
                                   representation=representation,
