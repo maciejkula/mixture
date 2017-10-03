@@ -13,11 +13,13 @@ from spotlight.sequence.implicit import ImplicitSequenceModel
 from spotlight.sequence.representations import LSTMNet
 from spotlight.evaluation import sequence_mrr_score
 
+from gaussian.model import DiversifiedImplicitSequenceModel
 from gaussian.representation import (GaussianLSTMNet,
                                      GaussianKLLSTMNet,
                                      MixtureLSTMNet,
                                      Mixture2LSTMNet,
-                                     LinearMixtureLSTMNet)
+                                     LinearMixtureLSTMNet,
+                                     DiversifiedMixtureLSTMNet)
 
 
 CUDA = torch.cuda.is_available()
@@ -113,22 +115,22 @@ if __name__ == '__main__':
              'l2': 0 * 5.645943698793739e-05,
              'learning_rate': 0.04822533874727729,
              'loss': 'adaptive_hinge',
-             'n_iter': 3.0,
+             'n_iter': 1.0,
              'type': 'gaussian_kl'}
 
     # representation = GaussianKLLSTMNet(train.num_items,
                                        # embedding_dim=int(hyper['embedding_dim']))
-    representation = LinearMixtureLSTMNet(train.num_items,
-                                          num_components=4,
-                                          embedding_dim=int(hyper['embedding_dim']))
-    model = ImplicitSequenceModel(loss=hyper['loss'],
-                                  batch_size=int(hyper['batch_size']),
-                                  representation=representation,
-                                  learning_rate=hyper['learning_rate'],
-                                  n_iter=int(hyper['n_iter']),
-                                  l2=hyper['l2'],
-                                  use_cuda=CUDA,
-                                  random_state=np.random.RandomState(42))
+    representation = DiversifiedMixtureLSTMNet(train.num_items,
+                                               num_components=4,
+                                               embedding_dim=int(hyper['embedding_dim']))
+    model = DiversifiedImplicitSequenceModel(loss=hyper['loss'],
+                                             batch_size=int(hyper['batch_size']),
+                                             representation=representation,
+                                             learning_rate=hyper['learning_rate'],
+                                             n_iter=int(hyper['n_iter']),
+                                             l2=hyper['l2'],
+                                             use_cuda=CUDA,
+                                             random_state=np.random.RandomState(42))
     model.fit(train, verbose=True)
 
     representation.train(False)

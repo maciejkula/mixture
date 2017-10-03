@@ -10,11 +10,13 @@ from spotlight.evaluation import sequence_mrr_score
 from spotlight.sequence.implicit import ImplicitSequenceModel
 from spotlight.sequence.representations import PoolNet, LSTMNet
 
+from gaussian.model import DiversifiedImplicitSequenceModel
 from gaussian.representation import (GaussianLSTMNet,
                                      GaussianKLLSTMNet,
                                      MixtureLSTMNet,
                                      Mixture2LSTMNet,
-                                     LinearMixtureLSTMNet)
+                                     LinearMixtureLSTMNet,
+                                     DiversifiedMixtureLSTMNet)
 
 
 CUDA = torch.cuda.is_available()
@@ -34,10 +36,6 @@ def hyperparameter_space():
 
     space = {
         'model': hp.choice('model', [
-            # {
-            #     'type': 'pooling',
-            #     **common_space,
-            # },
             {
                 'type': 'lstm',
                 **common_space
@@ -46,22 +44,15 @@ def hyperparameter_space():
                 'type': 'mixture',
                 **common_space
             },
-            # {
-            #     'type': 'mixture2',
-            #     **common_space
-            # },
             {
                 'type': 'linear_mixture',
                 **common_space
             },
-            # {
-            #     'type': 'gaussian_kl',
-            #     **common_space
-            # },
-            # {
-            #     'type': 'gaussian',
-            #     **common_space
-            # },
+            {
+                'type': 'diversified_mixture',
+                'diversity_penalty': hp.uniform('diversity_penalty', 0.05, 1),
+                **common_space
+            },
         ])
     }
 
@@ -77,6 +68,8 @@ def get_objective(train_nonsequence, train, validation, test):
         start = time.clock()
 
         h = hyper['model']
+
+        cls = ImplicitSequenceModel
 
         if h['type'] == 'pooling':
             representation = PoolNet(train.num_items,
@@ -108,10 +101,18 @@ def get_objective(train_nonsequence, train, validation, test):
             representation = LinearMixtureLSTMNet(train.num_items,
                                                   num_components=num_components,
                                                   embedding_dim=embedding_dim)
+        elif h['type'] == 'diversified_mixture':
+            num_components = int(h['num_components'])
+            embedding_dim = int(h['embedding_dim'])
+            representation = DiversifiedMixtureLSTMNet(train.num_items,
+                                                       num_components=num_components,
+                                                       diversity_penalty=h['diversity_penalty'],
+                                                       embedding_dim=embedding_dim)
+            cls = DiversifiedImplicitSequenceModel
         else:
             raise ValueError('Unknown model type')
 
-        model = ImplicitSequenceModel(
+        model = cls(
             batch_size=int(h['batch_size']),
             loss=h['loss'],
             learning_rate=h['learning_rate'],
