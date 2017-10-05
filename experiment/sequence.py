@@ -6,6 +6,7 @@ import torch
 
 from spotlight.datasets.movielens import get_movielens_dataset
 from spotlight.datasets.goodbooks import get_goodbooks_dataset
+from spotlight.datasets.amazon import get_amazon_dataset
 from spotlight.cross_validation import user_based_train_test_split
 
 from gaussian.sequence import get_objective, hyperparameter_space
@@ -18,14 +19,21 @@ CUDA = torch.cuda.is_available()
 
 def load_data(dataset, random_state):
 
-    if 'goodbooks' in dataset:
-        dataset = get_goodbooks_dataset()
-    else:
-        dataset = get_movielens_dataset(dataset)
-
     max_sequence_length = 100
     min_sequence_length = 20
     step_size = max_sequence_length
+
+    if 'goodbooks' in dataset:
+        dataset = get_goodbooks_dataset()
+    elif 'amazon' in dataset:
+        dataset = get_amazon_dataset()
+
+        # This is a dataset with shorter sequences
+        max_sequence_length = 50
+        min_sequence_length = 5
+        step_size = max_sequence_length
+    else:
+        dataset = get_movielens_dataset(dataset)
 
     train_nonsequence, rest = user_based_train_test_split(dataset,
                                                           test_percentage=0.2,

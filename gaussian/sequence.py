@@ -50,7 +50,7 @@ def hyperparameter_space():
             },
             {
                 'type': 'diversified_mixture',
-                'diversity_penalty': hp.uniform('diversity_penalty', 0.05, 1),
+                'diversity_penalty': hp.loguniform('diversity_penalty', -6, -2),
                 **common_space
             },
         ])
