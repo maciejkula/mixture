@@ -34,23 +34,23 @@ def hyperparameter_space():
 
     space = {
         'model': hp.choice('model', [
-            {
-                'type': 'lstm',
-                **common_space
-            },
-            {
-                'type': 'mixture',
-                **common_space
-            },
-            {
-                'type': 'linear_mixture',
-                **common_space
-            },
             # {
-            #     'type': 'diversified_mixture',
-            #     'diversity_penalty': hp.loguniform('diversity_penalty', -6, -2),
+            #     'type': 'lstm',
             #     **common_space
             # },
+            # {
+            #     'type': 'mixture',
+            #     **common_space
+            # },
+            # {
+            #     'type': 'linear_mixture',
+            #     **common_space
+            # },
+            {
+                'type': 'diversified_mixture_fixed',
+                'diversity_penalty': hp.uniform('diversity_penalty', 0, 2),
+                **common_space
+            },
         ])
     }
 
@@ -93,7 +93,7 @@ def get_objective(train_nonsequence, train, validation, test):
             representation = LinearMixtureLSTMNet(train.num_items,
                                                   num_components=num_components,
                                                   embedding_dim=embedding_dim)
-        elif h['type'] == 'diversified_mixture':
+        elif h['type'] == 'diversified_mixture_fixed':
             num_components = int(h['num_components'])
             embedding_dim = int(h['embedding_dim'])
             representation = DiversifiedMixtureLSTMNet(train.num_items,
