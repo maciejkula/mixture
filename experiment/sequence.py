@@ -9,9 +9,9 @@ from spotlight.datasets.goodbooks import get_goodbooks_dataset
 from spotlight.datasets.amazon import get_amazon_dataset
 from spotlight.cross_validation import user_based_train_test_split
 
-from gaussian.sequence import get_objective, hyperparameter_space
-from gaussian.hyperparameters import optimize
-from gaussian.results import summarize_trials
+from mixture.sequence import get_objective, hyperparameter_space
+from mixture.hyperparameters import optimize
+from mixture.results import summarize_trials
 
 
 CUDA = torch.cuda.is_available()

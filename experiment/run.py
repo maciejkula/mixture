@@ -13,13 +13,11 @@ from spotlight.sequence.implicit import ImplicitSequenceModel
 from spotlight.sequence.representations import LSTMNet
 from spotlight.evaluation import sequence_mrr_score
 
-from gaussian.model import DiversifiedImplicitSequenceModel
-from gaussian.representation import (GaussianLSTMNet,
-                                     GaussianKLLSTMNet,
-                                     MixtureLSTMNet,
-                                     Mixture2LSTMNet,
-                                     LinearMixtureLSTMNet,
-                                     DiversifiedMixtureLSTMNet)
+from mixture.model import DiversifiedImplicitSequenceModel
+from mixture.representation import (MixtureLSTMNet,
+                                    Mixture2LSTMNet,
+                                    LinearMixtureLSTMNet,
+                                    DiversifiedMixtureLSTMNet)
 
 
 CUDA = torch.cuda.is_available()

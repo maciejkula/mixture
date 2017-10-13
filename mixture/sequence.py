@@ -10,13 +10,11 @@ from spotlight.evaluation import sequence_mrr_score
 from spotlight.sequence.implicit import ImplicitSequenceModel
 from spotlight.sequence.representations import PoolNet, LSTMNet
 
-from gaussian.model import DiversifiedImplicitSequenceModel
-from gaussian.representation import (GaussianLSTMNet,
-                                     GaussianKLLSTMNet,
-                                     MixtureLSTMNet,
-                                     Mixture2LSTMNet,
-                                     LinearMixtureLSTMNet,
-                                     DiversifiedMixtureLSTMNet)
+from mixture.model import DiversifiedImplicitSequenceModel
+from mixture.representation import (MixtureLSTMNet,
+                                    Mixture2LSTMNet,
+                                    LinearMixtureLSTMNet,
+                                    DiversifiedMixtureLSTMNet)
 
 
 CUDA = torch.cuda.is_available()
@@ -48,11 +46,11 @@ def hyperparameter_space():
                 'type': 'linear_mixture',
                 **common_space
             },
-            {
-                'type': 'diversified_mixture',
-                'diversity_penalty': hp.loguniform('diversity_penalty', -6, -2),
-                **common_space
-            },
+            # {
+            #     'type': 'diversified_mixture',
+            #     'diversity_penalty': hp.loguniform('diversity_penalty', -6, -2),
+            #     **common_space
+            # },
         ])
     }
 
@@ -77,12 +75,6 @@ def get_objective(train_nonsequence, train, validation, test):
         elif h['type'] == 'lstm':
             representation = LSTMNet(train.num_items,
                                      embedding_dim=int(h['embedding_dim']))
-        elif h['type'] == 'gaussian':
-            representation = GaussianLSTMNet(train.num_items,
-                                             embedding_dim=int(h['embedding_dim']))
-        elif h['type'] == 'gaussian_kl':
-            representation = GaussianKLLSTMNet(train.num_items,
-                                               embedding_dim=int(h['embedding_dim']))
         elif h['type'] == 'mixture':
             num_components = int(h['num_components'])
             embedding_dim = int(h['embedding_dim'])
