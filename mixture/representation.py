@@ -560,7 +560,13 @@ class DiversifiedMixtureLSTMNet(nn.Module):
         # and promote orthogonality.
         taste_similarity = taste_similarity ** 2
 
-        return self._diversity_penalty * taste_similarity.sum()
+        # Average self-similarity
+        taste_similarity = taste_similarity.mean(2).mean(1)
+
+        # Wrap back into input shape
+        taste_similarity = taste_similarity.resize(batch_size, seq_len)
+
+        return self._diversity_penalty * taste_similarity
 
     def forward(self, user_representations, targets):
         """

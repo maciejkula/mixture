@@ -242,7 +242,8 @@ class DiversifiedImplicitSequenceModel(object):
                 loss = self._loss_func(positive_prediction,
                                        negative_prediction,
                                        mask=(sequence_var != PADDING_IDX))
-                loss += self._net.diversity_penalty(user_representation)
+                loss += self._diversity_loss(self._net.diversity_penalty(user_representation),
+                                             (sequence_var != PADDING_IDX))
 
                 epoch_loss += loss.data[0]
 
@@ -254,6 +255,13 @@ class DiversifiedImplicitSequenceModel(object):
 
             if verbose:
                 print('Epoch {}: loss {}'.format(epoch_num, epoch_loss))
+
+    def _diversity_loss(self, loss, mask):
+
+        mask = mask.float()
+        loss = loss * mask
+
+        return loss.sum() / mask.sum()
 
     def _get_negative_prediction(self, shape, user_representation):
 
