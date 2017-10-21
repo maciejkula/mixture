@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+<body>
+<h2 id="introduction">Introduction</h2>
+<p>Industry ranking and recommendation systems need to scale to tens or hundreds of millions of items and users. Ranking latency (in on-line settings) and compute and storage costs (in pre-compute settings) place significant contraints on the design of the resulting system.</p>
+<p>To alleviate these constraints, we propose the use of binary item and user representations in learning-to-rank matrix factorization models. Following the approach of [XNOR], we show that we can estimate binary user and item representations that achieve comparable accuracy to standard learning-to-rank approaches while being several times faster to score and requiring a fraction of the memory. In our MovieLens 100k experiments, our binary representations are within 1% of the accuracy of the real-valued model, but are over 2 times faster to score and take 50% of the memory.</p>
+<h2 id="related-work">Related work</h2>
+<h3 id="heuristics">Heuristics</h3>
+<h3 id="approximate-nearest-neighbours">Approximate nearest neighbours</h3>
+<h3 id="quantization">Quantization</h3>
+<h2 id="our-approach">Our approach</h2>
+<p>Note that the binary dot produt approach generalizes beyond simple factorization models, and can be applied as a component of any model whose final scoring step involves a dot product between user and item representations. In particular, models using recurrent (like Session-based Recommendations with Recurrent Neural Networks) or convolutional (Images Don’t Lie: Transferring Deep Visual Semantic Features to Large-Scale Multimodal Learning to Rank) item or user representations can easily be augmented to use binary dot products in the final ranking stages.</p>
+<p>The amount of computation required for recommendations, as well the memory used to store item and user representations,</p>
+<p>imposes significant constraints on the design of the ranking system. In on-line recommendations, latency constraints force the use of heuristics</p>
+We use the approach developed by XNOR-Net to approximate latent-space dot products through binary operations. In this approach, we approximate the dot product between the user vector <span class="math inline">\(\vec{u_i}\)</span> and the item vector <span class="math inline">\(\vec{i_i}\)</span> by
+\begin{equation}
+\mathrm{sign}(\vec{u_i}) \cdot \mathrm{sign}(\vec{i_i}) \cdot \Vert\vec{u_i}\Vert_{l1} \cdot \Vert\vec{i_i}\Vert_{l1}
+\end{equation}
+<h2 id="implementation">Implementation</h2>
+<p>The model is implemented in PyTorch and trained using the nVidia K40 GPUs. During training, the embedding parameters are stored as floats. Similarly, the XNOR dot product is carried out using floats in {1, -1}. The minibatch size and number of training epochs are treated as model hyperparameters. All models are trained using the Adam training rate schedule.</p>
+<p>The prediction code runs on the CPU and is implemented using Intel X86 AVX2 SIMD intrinsics. SIMD (Single Instruction Multiple Data) instructions allow the CPU to operate on multiple pieces of data in parallel, achieving significant speedups over the scalar version. We use explicit intrinsics rather than compiler autovectorization to ensure that neither the real-valued nor the binary prediction code is unfairly disadvantaged by the quality of compiler autovectorization.</p>
+<p>The real-valued prediction code is implemented using 8-float wide fused multiply-add instructions (_mm256_fmadd_ps).</p>
+<p>In the binary version, the 1-bit weights are packed into 32-bit integer buffers. The XNOR dot product is implemented using 8-integer wide XOR operations (256 binary weights are processed at a time), followed by a popcount instruction to count the number of on bits in the result. We use the X algorithm, as provided by the Y library, for implementing the bit counting.</p>
+<p>Both versions use 32-bit aligned input data to utilise aligned SIMD register load instructions.</p>
+<p>The code is compiled using GCC X for the AVX2-enabled Skylake architecture.</p>
+</body>
+</html>

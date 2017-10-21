@@ -1,0 +1,88 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{00}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Harper and Konstan}{Harper and
+  Konstan}{2016}]%
+        {harper2016movielens}
+\bibfield{author}{\bibinfo{person}{F~Maxwell Harper} {and}
+  \bibinfo{person}{Joseph~A Konstan}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{The movielens datasets: History and context}.
+\newblock \bibinfo{journal}{{\em ACM Transactions on Interactive Intelligent
+  Systems (TiiS)\/}} \bibinfo{volume}{5}, \bibinfo{number}{4}
+  (\bibinfo{year}{2016}), \bibinfo{pages}{19}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Rendle, Freudenthaler, Gantner, and
+  Schmidt-Thieme}{Rendle et~al\mbox{.}}{2009}]%
+        {rendle2009bpr}
+\bibfield{author}{\bibinfo{person}{Steffen Rendle}, \bibinfo{person}{Christoph
+  Freudenthaler}, \bibinfo{person}{Zeno Gantner}, {and} \bibinfo{person}{Lars
+  Schmidt-Thieme}.} \bibinfo{year}{2009}\natexlab{}.
+\newblock \showarticletitle{BPR: Bayesian personalized ranking from implicit
+  feedback}. In \bibinfo{booktitle}{{\em Proceedings of the twenty-fifth
+  conference on uncertainty in artificial intelligence}}. AUAI Press,
+  \bibinfo{pages}{452--461}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Weston, Bengio, and Usunier}{Weston
+  et~al\mbox{.}}{2011}]%
+        {weston2011wsabie}
+\bibfield{author}{\bibinfo{person}{Jason Weston}, \bibinfo{person}{Samy
+  Bengio}, {and} \bibinfo{person}{Nicolas Usunier}.}
+  \bibinfo{year}{2011}\natexlab{}.
+\newblock \showarticletitle{Wsabie: Scaling up to large vocabulary image
+  annotation}. In \bibinfo{booktitle}{{\em IJCAI}}, Vol.~\bibinfo{volume}{11}.
+  \bibinfo{pages}{2764--2770}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Zajac}{Zajac}{2017}]%
+        {goodbooks2017}
+\bibfield{author}{\bibinfo{person}{Zygmunt Zajac}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Goodbooks-10K dataset}.
+\newblock
+  \bibinfo{howpublished}{\url{https://github.com/zygmuntz/goodbooks-10k}}.
+\newblock \bibinfo{journal}{{\em GitHub\/}} (\bibinfo{year}{2017}).
+\newblock
+
+
+\end{thebibliography}

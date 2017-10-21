@@ -1,0 +1,56 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: paper.aux
+The style file: ACM-Reference-Format.bst
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: bibliography.bib
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--empty publisher in rendle2009bpr
+Warning--empty address in rendle2009bpr
+Warning--empty publisher in weston2011wsabie
+Warning--empty address in weston2011wsabie
+Warning--no number and no volume in goodbooks2017
+Warning--page numbers missing in both pages and numpages fields in goodbooks2017
+You've used 4 entries,
+            5706 wiz_defined-function locations,
+            1330 strings with 15871 characters,
+and the built_in function-call counts, 4502 in all, are:
+= -- 585
+> -- 151
+< -- 0
++ -- 46
+- -- 52
+* -- 289
+:= -- 448
+add.period$ -- 21
+call.type$ -- 4
+change.case$ -- 26
+chr.to.int$ -- 4
+cite$ -- 10
+duplicate$ -- 371
+empty$ -- 270
+format.name$ -- 64
+if$ -- 1117
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 18
+newline$ -- 71
+num.names$ -- 32
+pop$ -- 176
+preamble$ -- 1
+purify$ -- 46
+quote$ -- 0
+skip$ -- 134
+stack$ -- 0
+substring$ -- 294
+swap$ -- 34
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 92
+warning$ -- 6
+while$ -- 31
+width$ -- 0
+write$ -- 108
+(There were 6 warnings)
