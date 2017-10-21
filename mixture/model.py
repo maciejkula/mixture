@@ -248,10 +248,13 @@ class DiversifiedImplicitSequenceModel(object):
                 epoch_loss += loss.data[0]
 
                 loss.backward()
-                # assert False
                 self._optimizer.step()
 
             epoch_loss /= minibatch_num + 1
+
+            if np.isnan(epoch_loss) or epoch_loss == 0.0:
+                print('Degenerate loss, aborting.')
+                break
 
             if verbose:
                 print('Epoch {}: loss {}'.format(epoch_num, epoch_loss))
