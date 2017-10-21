@@ -11,7 +11,8 @@ def summarize_trials(trials):
     for model_type in ('pooling', 'lstm',
                        'mixture', 'mixture2',
                        'linear_mixture', 'diversified_mixture',
-                       'diversified_mixture_fixed'):
+                       'diversified_mixture_fixed',
+                       'bilinear'):
         results = [x for x in trials.trials if _get_type(x) == model_type]
         results = sorted(results, key=lambda x: x['result']['loss'])
 
