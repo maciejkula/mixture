@@ -19,7 +19,7 @@ CUDA = torch.cuda.is_available()
 def hyperparameter_space():
 
     common_space = {
-        'batch_size': hp.quniform('batch_size', 512, 4096, 512),
+        'batch_size': hp.quniform('batch_size', 128, 1024, 64),
         'learning_rate': hp.loguniform('learning_rate', -6, -3),
         'l2': hp.loguniform('l2', -25, -9),
         'embedding_dim': 64,

@@ -27,6 +27,7 @@ def load_data(dataset, random_state):
         dataset = get_movielens_dataset(dataset)
 
     train, rest = random_train_test_split(dataset,
+                                          test_percentage=0.05,
                                           random_state=random_state)
 
     test, validation = random_train_test_split(rest,
