@@ -79,7 +79,16 @@ def get_objective(train, validation, test):
             random_state=np.random.RandomState(42)
         )
 
-        model.fit(train, verbose=True)
+        try:
+            model.fit(train, verbose=True)
+        except ValueError:
+            elapsed = time.clock() - start
+            return {'loss': 0.0,
+                    'status': STATUS_FAIL,
+                    'validation_mrr': 0.0,
+                    'test_mrr': 0.0,
+                    'elapsed': elapsed,
+                    'hyper': h}
 
         elapsed = time.clock() - start
 
