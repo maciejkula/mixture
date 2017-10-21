@@ -41,10 +41,10 @@ def load_data(dataset, random_state):
 
 if __name__ == '__main__':
 
-    loss = 'bpr'
+    loss = 'adaptive_hinge'
     n_iter = 10
     learning_rate = 0.01
-    l2 = 1e-5
+    l2 = 1e-9
 
     random_state = np.random.RandomState(42)
 
@@ -63,5 +63,5 @@ if __name__ == '__main__':
                                        use_cuda=CUDA,
                                        random_state=np.random.RandomState(42))
     model.fit(train, verbose=True)
-    test_mrr = _evaluate(model, test, train)
+    test_mrr = _evaluate(model, test, train.tocsr() + validation.tocsr())
     print('Test MRR {}'.format(test_mrr))
