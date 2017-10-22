@@ -1,16 +1,11 @@
+import random
+
 import torch
 
 import torch.nn as nn
+import torch.nn.functional as F
 
 from spotlight.layers import ScaledEmbedding, ZeroEmbedding
-
-
-def softmax(x, dim):
-
-    numerator = torch.exp(x)
-    denominator = numerator.sum(dim, keepdim=True).expand_as(numerator)
-
-    return numerator / denominator
 
 
 class MixtureNet(nn.Module):
@@ -94,12 +89,22 @@ class MixtureNet(nn.Module):
                                   self.num_components,
                                   embedding_size))
         item_embedding = item_embedding.unsqueeze(1).expand_as(user_attention)
-        attention = (softmax((user_attention * item_embedding).sum(2), 1))
+
+        attention = F.softmax((user_attention * item_embedding).sum(2))
+
         preference = ((user_tastes * item_embedding)
                       .sum(2))
         weighted_preference = (attention * preference).sum(1).squeeze()
 
         user_bias = self.user_biases(user_ids).squeeze()
         item_bias = self.item_biases(item_ids).squeeze()
+
+        # if random.random() < 0.01:
+        #     print('Attention', (user_attention * item_embedding).sum(2).max().data[0])
+        #     print('Softmax', attention.max(1)[0].mean().data[0])
+        #     print('Preference', preference.max(1)[0].mean().data[0])
+        #     print('Prediction', weighted_preference.mean().data[0])
+        #     print('Biases', user_bias.max().data[0], item_bias.max().data[0])
+        # assert False
 
         return weighted_preference + user_bias + item_bias
