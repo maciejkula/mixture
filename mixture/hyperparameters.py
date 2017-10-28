@@ -19,7 +19,8 @@ def optimize(objective, space, trials_fname=None, max_evals=5):
 
     fmin(objective,
          space=space,
-         algo=hyperopt.rand.suggest,
+         algo=hyperopt.tpe.suggest,
+         #algo=hyperopt.rand.suggest,
          trials=trials,
          max_evals=max_evals)
 

@@ -10,7 +10,7 @@ from spotlight.evaluation import mrr_score
 from spotlight.factorization.implicit import ImplicitFactorizationModel
 from spotlight.factorization.representations import BilinearNet
 
-from mixture.factorization_representation import MixtureNet
+from mixture.factorization_representation import MixtureNet, NonlinearMixtureNet, EmbeddingMixtureNet
 
 
 CUDA = torch.cuda.is_available()
@@ -19,11 +19,12 @@ CUDA = torch.cuda.is_available()
 def hyperparameter_space():
 
     common_space = {
-        'batch_size': hp.quniform('batch_size', 128, 1024, 64),
-        'learning_rate': hp.loguniform('learning_rate', -6, -3),
+        'batch_size': hp.quniform('batch_size', 512, 16384, 256),
+        'learning_rate': hp.loguniform('learning_rate', -7, -5),
         'l2': hp.loguniform('l2', -25, -9),
-        'embedding_dim': 64,
-        'n_iter': hp.quniform('n_iter', 5, 50, 5),
+        'embedding_dim': 32,
+        'num_components': hp.quniform('num_components', 2, 8, 2),
+        'n_iter': hp.quniform('n_iter', 5, 100, 5),
         'loss': hp.choice('loss', ['adaptive_hinge'])
     }
 
@@ -35,9 +36,16 @@ def hyperparameter_space():
             },
             {
                 'type': 'mixture',
-                'num_components': hp.quniform('num_components', 2, 8, 2),
                 **common_space
             },
+            {
+                'type': 'embedding_mixture',
+                **common_space
+            },
+            # {
+            #     'type': 'nonlinear_mixture',
+            #     **common_space
+            # },
         ])
     }
 
@@ -65,6 +73,16 @@ def get_objective(train, validation, test):
                                         train.num_items,
                                         num_components=int(h['num_components']),
                                         embedding_dim=int(h['embedding_dim']))
+        elif h['type'] == 'nonlinear_mixture':
+            representation = NonlinearMixtureNet(train.num_users,
+                                                 train.num_items,
+                                                 num_components=int(h['num_components']),
+                                                 embedding_dim=int(h['embedding_dim']))
+        elif h['type'] == 'embedding_mixture':
+            representation = EmbeddingMixtureNet(train.num_users,
+                                                 train.num_items,
+                                                 num_components=int(h['num_components']),
+                                                 embedding_dim=int(h['embedding_dim']))
         else:
             raise ValueError('Unknown model type')
 

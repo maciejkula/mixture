@@ -2,9 +2,13 @@ import glob
 import os
 import pickle
 
-from tabulate import tabulate
-
 import numpy as np
+
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+
+from tabulate import tabulate
 
 
 def _get_type(trial):
@@ -18,6 +22,7 @@ def summarize_trials(trials):
                        'mixture', 'mixture2',
                        'linear_mixture', 'diversified_mixture',
                        'diversified_mixture_fixed',
+                       'embedding_mixture',
                        'bilinear'):
         results = [x for x in trials.trials if _get_type(x) == model_type]
         results = sorted(results, key=lambda x: -x['result']['validation_mrr'])
@@ -38,9 +43,21 @@ def _get_best_test_result(results, model_type, filter_fnc=None):
 
     results = [x for x in results.trials
                if _get_type(x) == model_type and filter_fnc(x)]
-    best = sorted(results, key=lambda x: x['result']['validation_mrr'])[-1]
 
-    return best['result']['test_mrr']
+
+    try:
+        best = sorted(results, key=lambda x: x['result']['validation_mrr'])[-1]
+
+        return best['result']['test_mrr']
+    except IndexError:
+        return '-'
+
+
+def _get_test_result_history(results, model_type):
+
+    results = [x for x in results.trials if _get_type(x) == model_type]
+
+    return np.array([x['result']['test_mrr'] for x in results])
 
 
 def read_results(path, variant):
@@ -65,7 +82,8 @@ def generate_performance_table(results):
     rows = []
 
     for (model_name, model) in (('LSTM', 'lstm'),
-                                ('Mixture-LSTM', 'mixture')):
+                                ('Mixture-LSTM', 'mixture'),
+                                ('Linear Mixture-LSTM', 'linear_mixture')):
 
         row = [model_name]
 
@@ -103,3 +121,28 @@ def generate_hyperparameter_table(results):
                     floatfmt='.4f',
                     tablefmt='latex_booktabs')
 
+
+def plot_hyperparam_search(results, max_iter=100):
+
+    fig, (ax0, ax1, ax2) = plt.subplots(1, 3)
+
+    dataset_names = {'10M': 'Movielens 10M',
+                     'amazon': 'Amazon',
+                     'goodbooks': 'Goodbooks-10K'}
+
+    for (dataset, ax) in zip(('10M', 'amazon', 'goodbooks'), (ax0, ax1, ax2)):
+
+        baseline = np.maximum.accumulate(
+            _get_test_result_history(results[dataset], 'lstm')[:max_iter])
+        mixture = np.maximum.accumulate(
+            _get_test_result_history(results[dataset], 'mixture')[:max_iter])
+
+        ax.plot(np.arange(len(baseline)), baseline, label='LSTM')
+        ax.plot(np.arange(len(mixture)), mixture, label='Mixture-LSTM')
+        ax.set_title(dataset_names[dataset])
+
+        if dataset == 'goodbooks':
+            ax.legend()
+
+    fig.tight_layout()
+    fig.savefig('hyperparam_search.png')

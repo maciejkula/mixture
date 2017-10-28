@@ -34,23 +34,23 @@ def hyperparameter_space():
 
     space = {
         'model': hp.choice('model', [
-            # {
-            #     'type': 'lstm',
-            #     **common_space
-            # },
-            # {
-            #     'type': 'mixture',
-            #     **common_space
-            # },
+            {
+                'type': 'lstm',
+                **common_space
+            },
+            {
+                'type': 'mixture',
+                **common_space
+            },
             # {
             #     'type': 'linear_mixture',
             #     **common_space
             # },
-            {
-                'type': 'diversified_mixture_fixed',
-                'diversity_penalty': hp.uniform('diversity_penalty', 0, 2),
-                **common_space
-            },
+            # {
+            #     'type': 'diversified_mixture_fixed',
+            #     'diversity_penalty': hp.uniform('diversity_penalty', 0, 2),
+            #     **common_space
+            # },
         ])
     }
 
