@@ -11,6 +11,13 @@ import seaborn as sns
 from tabulate import tabulate
 
 
+class Result:
+
+    def __init__(self, trials):
+
+        self.trials = trials
+
+
 def _get_type(trial):
 
     return trial['result']['hyper']['type']
@@ -44,7 +51,6 @@ def _get_best_test_result(results, model_type, filter_fnc=None):
     results = [x for x in results.trials
                if _get_type(x) == model_type and filter_fnc(x)]
 
-
     try:
         best = sorted(results, key=lambda x: x['result']['validation_mrr'])[-1]
 
@@ -76,9 +82,10 @@ def read_results(path, variant):
     return results
 
 
-def generate_performance_table(results):
+def generate_performance_table(sequence, factorization):
 
     headers = ['Model', 'Movielens 10M', 'Amazon', 'Goodbooks-10K']
+    datasets = ('10M', 'amazon', 'goodbooks')
     rows = []
 
     for (model_name, model) in (('LSTM', 'lstm'),
@@ -87,8 +94,20 @@ def generate_performance_table(results):
 
         row = [model_name]
 
-        for dataset in ('10M', 'amazon', 'goodbooks'):
-            mrr = _get_best_test_result(results[dataset], model)
+        for dataset in datasets:
+            mrr = _get_best_test_result(sequence[dataset], model)
+            row.append(mrr)
+
+        rows.append(row)
+
+    for (model_name, model) in (('Bilinear', 'bilinear'),
+                                ('Projection Mixture', 'mixture'),
+                                ('Embedding Mixture', 'embedding_mixture')):
+
+        row = [model_name]
+
+        for dataset in datasets:
+            mrr = _get_best_test_result(factorization[dataset], model)
             row.append(mrr)
 
         rows.append(row)
@@ -122,23 +141,42 @@ def generate_hyperparameter_table(results):
                     tablefmt='latex_booktabs')
 
 
-def plot_hyperparam_search(results, max_iter=100):
+def plot_hyperparam_search(sequence, factorization, max_iter=100):
 
-    fig, (ax0, ax1, ax2) = plt.subplots(1, 3)
+    fig, axes = plt.subplots(2, 3)
+
+    sequence_axes, factorization_axes = (axes[0], axes[1])
 
     dataset_names = {'10M': 'Movielens 10M',
                      'amazon': 'Amazon',
                      'goodbooks': 'Goodbooks-10K'}
 
-    for (dataset, ax) in zip(('10M', 'amazon', 'goodbooks'), (ax0, ax1, ax2)):
+    for (dataset, ax) in zip(('10M', 'amazon', 'goodbooks'), sequence_axes):
 
         baseline = np.maximum.accumulate(
-            _get_test_result_history(results[dataset], 'lstm')[:max_iter])
+            _get_test_result_history(sequence[dataset], 'lstm')[:max_iter])
         mixture = np.maximum.accumulate(
-            _get_test_result_history(results[dataset], 'mixture')[:max_iter])
+            _get_test_result_history(sequence[dataset], 'mixture')[:max_iter])
 
         ax.plot(np.arange(len(baseline)), baseline, label='LSTM')
         ax.plot(np.arange(len(mixture)), mixture, label='Mixture-LSTM')
+        ax.set_title(dataset_names[dataset])
+
+        if dataset == 'goodbooks':
+            ax.legend()
+
+    for (dataset, ax) in zip(('10M', 'amazon', 'goodbooks'), factorization_axes):
+
+        baseline = np.maximum.accumulate(
+            _get_test_result_history(factorization[dataset], 'bilinear')[:max_iter])
+        mixture = np.maximum.accumulate(
+            _get_test_result_history(factorization[dataset], 'mixture')[:max_iter])
+        embedding_mixture = np.maximum.accumulate(
+            _get_test_result_history(factorization[dataset], 'embedding_mixture')[:max_iter])
+
+        ax.plot(np.arange(len(baseline)), baseline, label='Bilinear')
+        ax.plot(np.arange(len(mixture)), mixture, label='Projection Mixture')
+        ax.plot(np.arange(len(embedding_mixture)), embedding_mixture, label='Embedding Mixture')
         ax.set_title(dataset_names[dataset])
 
         if dataset == 'goodbooks':
