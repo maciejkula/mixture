@@ -4,11 +4,17 @@ import pickle
 
 import numpy as np
 
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
 from tabulate import tabulate
+
+
+sns.set_style({'font.family': 'serif'})
+sns.set_context('paper')
 
 
 class Result:
@@ -56,7 +62,7 @@ def _get_best_test_result(results, model_type, filter_fnc=None):
 
         return best['result']['test_mrr']
     except IndexError:
-        return '-'
+        return 0.0
 
 
 def _get_test_result_history(results, model_type):
@@ -112,10 +118,12 @@ def generate_performance_table(sequence, factorization):
 
         rows.append(row)
 
-    return tabulate(rows,
-                    headers=headers,
-                    floatfmt='.4f',
-                    tablefmt='latex_booktabs')
+    output = tabulate(rows,
+                      headers=headers,
+                      floatfmt='.4f',
+                      tablefmt='latex_booktabs')
+
+    return output.replace('Bilinear', '\midrule\n Bilinear')
 
 
 def generate_hyperparameter_table(results):
@@ -151,7 +159,8 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
                      'amazon': 'Amazon',
                      'goodbooks': 'Goodbooks-10K'}
 
-    for (dataset, ax) in zip(('10M', 'amazon', 'goodbooks'), sequence_axes):
+    for (i, (dataset, ax)) in enumerate(zip(('10M', 'amazon', 'goodbooks'),
+                                            sequence_axes)):
 
         baseline = np.maximum.accumulate(
             _get_test_result_history(sequence[dataset], 'lstm')[:max_iter])
@@ -162,10 +171,15 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
         ax.plot(np.arange(len(mixture)), mixture, label='Mixture-LSTM')
         ax.set_title(dataset_names[dataset])
 
-        if dataset == 'goodbooks':
+        if i == 0:
+            ax.set_xlabel('Iterations')
+            ax.set_ylabel('MRR')
+
+        if i == len(factorization_axes):
             ax.legend()
 
-    for (dataset, ax) in zip(('10M', 'amazon', 'goodbooks'), factorization_axes):
+    for (i, (dataset, ax)) in enumerate(zip(('10M', 'amazon', 'goodbooks'),
+                                            factorization_axes)):
 
         baseline = np.maximum.accumulate(
             _get_test_result_history(factorization[dataset], 'bilinear')[:max_iter])
@@ -179,11 +193,15 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
         ax.plot(np.arange(len(embedding_mixture)), embedding_mixture, label='Embedding Mixture')
         ax.set_title(dataset_names[dataset])
 
-        if dataset == 'goodbooks':
+        if i == 0:
+            ax.set_xlabel('Iterations')
+            ax.set_ylabel('MRR')
+
+        if i == len(factorization_axes):
             ax.legend()
 
     fig.tight_layout()
-    fig.savefig('hyperparam_search.png')
+    fig.savefig('hyperparam_search.eps')
 
 
 def _bootstrap_max(data, num_samples):

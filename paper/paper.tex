@@ -56,8 +56,40 @@ Most existing recommendation approaches implicitly treat user tastes as unimodal
 
 
 \section{Introduction}
+Latent vector-based recommender models commonly represent users with a single latent vector per user \citep{koren2009bellkor, hu2008collaborative}. This representation, while simple in formulation and efficient to compute, neglects te fact that users have diverse sub-tastes, and that observed user interactions can be seen as manifestations of several \emph{distinct} tastes or intents. These may either be stable facets of the user's preference (liking both horror and documentary movies, or both bluegrass and classical music), context-driven changes (preference for short-form TV content during the week but long-form cinematography during the week-end), or manifestations of phenomena like account sharing, where two (or more) different users, with correspondingly different tastes, share the same user account.
 
+In all these cases, trying to capture the user's taste in a single latent vector is suboptimal. Firstly, it may lead to lack of nuance in representing the user, where a dominant taste may overpower more niche ones. Secondly it may reduce the quality of item representations, especially when it leads to decreasing the separation in the embedding space between groups of items belonging to multiple tastes or genres. For illustration, suppose that documentaries and horror movies are distinct genres, in the sense that most users prefer one or the other: but that there is still a group of users who like both. To represent that group of users, the genres' embeddings will have to be separated less cleanly than they would be if the model could express the concept of multiple tastes. In general, these problems are similar to that of fitting a unimodal distributional model to bimodal data; for Gaussians, the resulting fitted distribution will be a poor model of the data, and the majority of its density mass will coincide with neither of the true modes.
 
+\section{Model}
+Let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user $i$, and $A_i$ be a $m \times k$ matrix representing the affinities of each taste for representing particular items. The recommendation score for item $j$, represented by a $k times 1$-dimensional embedding vector $e_j$, is then given by
+\begin{equation}
+  r_{ij} = \phi \left(A_ie_j\right) \cdot U_ie_j,
+\end{equation}
+where $\phi$ is the elementwise sigmoid function $\frac{1}{1 + e^{-x}}$.
+
+This gives a mixture of tastes, where the contribution of each individual tastes component is weighted by how competent it is in evaluating item $j$.
+
+How $U_i$ and $A_i$ are obtained differs between the three evaluated models. In the Mixture-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state of an LSTM layer trained on the user's previous interactions, $z_{it}$:
+\begin{equation}
+  z_{it} = \mathrm{LSTM}\left(e_{i1}, e_{i2} \ldots e_{it}\right).
+\end{equation}
+Given $z_{it}$, the $m$-th row of $U_{it}$ and $A_{it}$ is given by
+\begin{equation}
+\begin{aligned}
+  u^m_{it} &= W^U_mz_{it} + B^U_m\\
+  a^m_{it} &= W^A_mz_{it} + B^A_m,\\
+\end{aligned}
+\end{equation}
+where $W^U_m$, $W^A_M$, $B^U_m$, and $B^A_m$ are the learned projection matrices. These are common across all users, representing a modest increase in the total number of model parameters.
+
+The Projection Mixture factorization model is similar: an embedding $z_i$ is estimated for each user, and the $U_i$ and $A_i$ matrices are obtained via linear projections:
+\begin{equation}
+\begin{aligned}
+  u^m_{i} &= W^U_mz_{i} + B^U_m\\
+  a^m_{i} &= W^A_mz_{i} + B^A_m.\\
+\end{aligned}
+\end{equation}
+This keeps the number of model parameters small at a potential cost to model capacity. In contrast, the Embedding Mixture factorization model embeds $U_i$ and $A_i$ directly. This substantially increases the number of model parameters, but may lead to better accuracy.
 
 \section{Experiments}
 \subsection{Datasets}
@@ -102,10 +134,15 @@ Across all of our experiments, the adaptive maximum margin loss consistently out
 \label{tb:results}
 \begin{tabular}{lrrr}
 \toprule
- Model        &   Movielens 10M &   Amazon &   Goodbooks-10K \\
+ Model               &   Movielens 10M &   Amazon &   Goodbooks-10K \\
 \midrule
- LSTM         &            0.09 &    0.15  &           0.116 \\
- Mixture-LSTM &            0.1  &    0.189 &           0.136 \\
+ LSTM                &          0.0901 &   0.1502 &          0.1158 \\
+ Mixture-LSTM        &          0.0999 &   0.1889 &          0.1358 \\
+ Linear Mixture-LSTM &          0.0000 &   0.1484 &          0.1163 \\
+ \midrule
+ Bilinear            &          0.0999 &   0.1001 &          0.0738 \\
+ Projection Mixture  &          0.0983 &   0.0698 &          0.0712 \\
+ Embedding Mixture   &          0.0952 &   0.1696 &          0.0853 \\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
@@ -118,6 +155,12 @@ Across all of our experiments, the adaptive maximum margin loss consistently out
 \end{tablenotes}
 \end{threeparttable}
 \end{table*}
+
+\begin{figure*}[h]
+  \caption{Hyperparameter search}
+  \label{fig:hyper}
+  \includegraphics[width=\textwidth]{hyperparam_search.eps}
+\end{figure*}
 
 
 %% \section{Introduction}
