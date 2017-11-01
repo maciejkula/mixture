@@ -146,3 +146,53 @@ def plot_hyperparam_search(results, max_iter=100):
 
     fig.tight_layout()
     fig.savefig('hyperparam_search.png')
+
+
+def _bootstrap_max(data, num_samples):
+
+    maxima = []
+
+    for _ in range(num_samples):
+        sample = np.random.choice(data, size=len(data), replace=True)
+        maxima.append(np.max(sample))
+
+    return np.array(maxima)
+
+
+def plot_hyperparam_bootstrap(results, num_samples=10000):
+
+    fig, (ax0, ax1, ax2) = plt.subplots(1, 3)
+
+    dataset_names = {'10M': 'Movielens 10M',
+                     'amazon': 'Amazon',
+                     'goodbooks': 'Goodbooks-10K'}
+
+    for (dataset, ax) in zip(('10M', 'amazon', 'goodbooks'), (ax0, ax1, ax2)):
+
+        baseline = _get_test_result_history(results[dataset], 'lstm')
+        mixture = _get_test_result_history(results[dataset], 'mixture')
+
+        baseline_bootstrap = _bootstrap_max(baseline, num_samples)
+        mixture_bootstrap = _bootstrap_max(mixture, num_samples)
+
+        _, bins = np.histogram(np.concatenate([baseline_bootstrap,
+                                               mixture_bootstrap]),
+                               bins='auto')
+        alpha = 0.75
+        ax.hist(baseline_bootstrap,
+                bins=bins,
+                normed=True,
+                alpha=alpha,
+                label='LSTM')
+        ax.hist(mixture_bootstrap,
+                bins=bins,
+                normed=True,
+                alpha=alpha,
+                label='Mixture-LSTM')
+        ax.set_title(dataset_names[dataset])
+
+        if dataset == 'goodbooks':
+            ax.legend()
+
+    fig.tight_layout()
+    fig.savefig('hyperparam_bootstrap.png')
