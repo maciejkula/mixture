@@ -63,15 +63,15 @@ In all these cases, trying to capture the user's taste in a single latent vector
 \section{Model}
 Let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user $i$, and $A_i$ be a $m \times k$ matrix representing the affinities of each taste for representing particular items. The recommendation score for item $j$, represented by a $k times 1$-dimensional embedding vector $e_j$, is then given by
 \begin{equation}
-  r_{ij} = \phi \left(A_ie_j\right) \cdot U_ie_j,
+  r_{ij} = \sigma \left(A_ie_j\right) \cdot U_ie_j,
 \end{equation}
-where $\phi$ is the elementwise sigmoid function $\frac{1}{1 + e^{-x}}$.
+where $\sigma$ is the elementwise sigmoid function $\frac{1}{1 + e^{-x}}$.
 
 This gives a mixture of tastes, where the contribution of each individual tastes component is weighted by how competent it is in evaluating item $j$.
 
 How $U_i$ and $A_i$ are obtained differs between the three evaluated models. In the Mixture-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state of an LSTM layer trained on the user's previous interactions, $z_{it}$:
 \begin{equation}
-  z_{it} = \mathrm{LSTM}\left(e_{i1}, e_{i2} \ldots e_{it}\right).
+  z_{it} = \mathrm{LSTM}\left(e_{i1}, e_{i2}, \ldots, e_{it}\right).
 \end{equation}
 Given $z_{it}$, the $m$-th row of $U_{it}$ and $A_{it}$ is given by
 \begin{equation}
@@ -91,6 +91,8 @@ The Projection Mixture factorization model is similar: an embedding $z_i$ is est
 \end{equation}
 This keeps the number of model parameters small at a potential cost to model capacity. In contrast, the Embedding Mixture factorization model embeds $U_i$ and $A_i$ directly. This substantially increases the number of model parameters, but may lead to better accuracy.
 
+In all models, the input and output item embeddings $e$ are tied.
+
 \section{Experiments}
 \subsection{Datasets}
 For our experiments, we use the following datasets.
@@ -104,29 +106,36 @@ We treat all datasets as implicit feedback datasets, where the existence of an e
 \subsection{Experimental setup}
 For factorization models, we split the interaction datasets randomly into train, validation, and test sets. We use 80\% of interactions for training, and 10\% each for validation and testing. We make no effort to ensure that all items and users in the validation and test sets have a minimum number of training interactions. Our results therefore represent partial cold-start conditions.
 
-For sequence-based models, we order all interactions chronologically, and split the dataset by randomly assigning users into train, validation, and test sets. This means that the train, test, and validation sets are disjoint along the user dimension. For each dataset, we define a maximum interaction sequence length. This is set to 100 for the Goodbooks and Movielens datasets, and 50 for the Amazon dataset, as the interaction sequences in the Amazon dataset are generally shorter. Sequences shorter than the maximum sequence length are padded with zeros.
+For sequence-based models, we order all interactions chronologically, and split the dataset by randomly assigning users into train, validation, and test sets. This means that the train, test, and validation sets are disjoint along the user dimension. For each dataset, we define a maximum interaction sequence length. This is set to 100 for the Goodbooks and Movielens datasets, and 50 for the Amazon dataset, as the interaction sequences in the Amazon dataset are generally shorter. Sequences shorter than the maximum sequence length are padded with zeros. The models are trained by trying to predict the next item that the user interacts with on the basis of all their prior interactions.
 
 We use mean reciprocal rank (MRR) as our measure of model quality. In factorization models, we use the user representations obtained from the training set to construct rankings over items in the test set. In sequence models, we use the last element of the test interaction sequence as the prediction target; the remaining elements are used to compute the user representation.
-
-We perform extensive hyperparameter optimization across both our proposed models and all baselines to mitigate the danger that our results driven either by models' sensitivity to hyperparameter choices (when a superior model performs poorly because of a poor choice of hyperparameters), or experimenter bias (in favouring the optimization of the novel model). We optimize batch size, number of training epochs, the learning rate, L2 regularization weight, the loss function, and (where appropriate) the number of taste mixture components.
 
 We experiment with two loss functions:
 \begin{itemize}
 \item Bayesian personalised ranking (BPR, \citet{rendle2009bpr}), and
 \item adaptive sampling maximum margin loss, following \citet{weston2011wsabie}.
 \end{itemize}
-For both loss functions, for any known positive user-item interaction pair $(u, i)$, we uniformly sample an implicit negative item $j \in \symUserInteractionSet^-$. For BPR, the loss for any such triplet is given by
+For both loss functions, for any known positive user-item interaction pair $(i, j)$, we uniformly sample an implicit negative item $k \in \symUserInteractionSet^-$. For BPR, the loss for any such triplet is given by
 \begin{equation}
-1 - \sigma\left(r_{ui} - r_{uj}\right),
+1 - \sigma\left(r_{ij} - r_{ik}\right),
 \end{equation}
 where $\sigma$ denotes the sigmoid function.
 The adaptive sampling loss is given by
 \begin{equation}
-\abs{1 - r_{ui} + r_{uj}}_{+}.
+\abs{1 - r_{ij} + r_{ik}}_{+}.
 \end{equation}
-For any $(u, i)$ pair, if the sampled negative item $j$ results in a zero loss (that is, the desired pairwise ordering is not violated), a new negative item is sampled, up to a total of $k$ attempts. This leads the model to perform more gradient updates in areas where its ranking performance is poorest.
+For any $(i, j)$ pair, if the sampled negative item $k$ results in a zero loss (that is, the desired pairwise ordering is not violated), a new negative item is sampled, up to a maximum number of attempts. This leads the model to perform more gradient updates in areas where its ranking performance is poorest.
 
 Across all of our experiments, the adaptive maximum margin loss consistently outperforms the BPR loss on both baseline and mixture models. We therefore only report results for the adaptive loss.
+
+We perform extensive hyperparameter optimization across both our proposed models and all baselines. Our goal is two-fold. Firstly, we want to mitigate researcher bias, where more care and attention is devoted to the researcher's proposed model, thus unfairly disadvantaging baseline algorithms in a performance comparison. We believe this to be a common phenomenon; its extent is illustrated, in a related domain, by \cite{melis2017state}, who find that standard LSTM architectures, when properly tuned, outperform more recent algorithms in natural laguage modelling tasks. Secondly, we wish to understand the extent to which the mixture-of-interests models are \emph{fragile}, in the sense of being highly sensitive to hyperparameter choices. Such fragile algorithms are potentially of lesser utility in industry applications, where the engineering cost of tuning in maintaing them may outweigh the accuracy benefits they bring.
+
+We use random search to tune the algorthms used in our experiments. We optimize batch size, number of training epochs, the learning rate, L2 regularization weight, the loss function, and (where appropriate) the number of taste mixture components.
+
+\section{Results}
+
+\subsection{Hyperparameter search}
+Figure~\ref{fig:hyper} plots the maximum test MRR obtained by each of our algorithms as a function of the number of elapsed hyperparameter search iterations.
 
 \begin{table*}[htbp]
 \begin{threeparttable}

@@ -8,51 +8,53 @@ Database file #1: bibliography.bib
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Warning--empty publisher in hu2008collaborative
 Warning--empty address in hu2008collaborative
+Warning--no number and no volume in melis2017state
+Warning--page numbers missing in both pages and numpages fields in melis2017state
 Warning--empty publisher in rendle2009bpr
 Warning--empty address in rendle2009bpr
 Warning--empty publisher in weston2011wsabie
 Warning--empty address in weston2011wsabie
 Warning--no number and no volume in goodbooks2017
 Warning--page numbers missing in both pages and numpages fields in goodbooks2017
-You've used 6 entries,
+You've used 7 entries,
             5706 wiz_defined-function locations,
-            1343 strings with 16184 characters,
-and the built_in function-call counts, 6680 in all, are:
-= -- 881
-> -- 212
+            1347 strings with 16342 characters,
+and the built_in function-call counts, 7655 in all, are:
+= -- 1035
+> -- 253
 < -- 0
-+ -- 64
-- -- 72
-* -- 423
-:= -- 658
-add.period$ -- 31
-call.type$ -- 6
-change.case$ -- 38
-chr.to.int$ -- 6
-cite$ -- 14
-duplicate$ -- 561
-empty$ -- 409
-format.name$ -- 88
-if$ -- 1675
++ -- 76
+- -- 84
+* -- 494
+:= -- 756
+add.period$ -- 36
+call.type$ -- 7
+change.case$ -- 45
+chr.to.int$ -- 7
+cite$ -- 17
+duplicate$ -- 628
+empty$ -- 461
+format.name$ -- 104
+if$ -- 1937
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 27
-newline$ -- 86
-num.names$ -- 48
-pop$ -- 262
+missing$ -- 31
+newline$ -- 94
+num.names$ -- 56
+pop$ -- 299
 preamble$ -- 1
-purify$ -- 68
+purify$ -- 80
 quote$ -- 0
-skip$ -- 201
+skip$ -- 220
 stack$ -- 0
-substring$ -- 459
-swap$ -- 52
+substring$ -- 503
+swap$ -- 55
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 138
-warning$ -- 8
-while$ -- 49
+type$ -- 154
+warning$ -- 10
+while$ -- 53
 width$ -- 0
-write$ -- 142
-(There were 8 warnings)
+write$ -- 158
+(There were 10 warnings)

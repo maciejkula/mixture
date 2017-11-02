@@ -70,6 +70,19 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Melis, Dyer, and Blunsom}{Melis
+  et~al\mbox{.}}{2017}]%
+        {melis2017state}
+\bibfield{author}{\bibinfo{person}{G{\'a}bor Melis}, \bibinfo{person}{Chris
+  Dyer}, {and} \bibinfo{person}{Phil Blunsom}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{On the State of the Art of Evaluation in Neural
+  Language Models}.
+\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1707.05589\/}}
+  (\bibinfo{year}{2017}).
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Rendle, Freudenthaler, Gantner, and
   Schmidt-Thieme}{Rendle et~al\mbox{.}}{2009}]%
         {rendle2009bpr}

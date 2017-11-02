@@ -175,7 +175,7 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
             ax.set_xlabel('Iterations')
             ax.set_ylabel('MRR')
 
-        if i == len(factorization_axes):
+        if i == len(sequence_axes) - 1:
             ax.legend()
 
     for (i, (dataset, ax)) in enumerate(zip(('10M', 'amazon', 'goodbooks'),
@@ -197,7 +197,7 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
             ax.set_xlabel('Iterations')
             ax.set_ylabel('MRR')
 
-        if i == len(factorization_axes):
+        if i == len(factorization_axes) - 1:
             ax.legend()
 
     fig.tight_layout()
