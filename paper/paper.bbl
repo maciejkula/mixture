@@ -37,6 +37,17 @@
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
 
+\bibitem[\protect\citeauthoryear{Athiwaratkun and Wilson}{Athiwaratkun and
+  Wilson}{2017}]%
+        {athiwaratkun2017multimodal}
+\bibfield{author}{\bibinfo{person}{Ben Athiwaratkun} {and}
+  \bibinfo{person}{Andrew~Gordon Wilson}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Multimodal Word Distributions}.
+\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1704.08424\/}}
+  (\bibinfo{year}{2017}).
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Harper and Konstan}{Harper and
   Konstan}{2016}]%
         {harper2016movielens}
@@ -96,6 +107,17 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Vilnis and McCallum}{Vilnis and
+  McCallum}{2014}]%
+        {vilnis2014word}
+\bibfield{author}{\bibinfo{person}{Luke Vilnis} {and} \bibinfo{person}{Andrew
+  McCallum}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Word Representations via Gaussian Embedding}.
+\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1412.6623\/}}
+  (\bibinfo{year}{2014}).
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Weston, Bengio, and Usunier}{Weston
   et~al\mbox{.}}{2011}]%
         {weston2011wsabie}
@@ -105,6 +127,17 @@
 \newblock \showarticletitle{Wsabie: Scaling up to large vocabulary image
   annotation}. In \bibinfo{booktitle}{{\em IJCAI}}, Vol.~\bibinfo{volume}{11}.
   \bibinfo{pages}{2764--2770}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Weston, Weiss, and Yee}{Weston
+  et~al\mbox{.}}{2013}]%
+        {weston2013nonlinear}
+\bibfield{author}{\bibinfo{person}{Jason Weston}, \bibinfo{person}{Ron~J
+  Weiss}, {and} \bibinfo{person}{Hector Yee}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Nonlinear latent factorization by embedding
+  multiple user interests}. In \bibinfo{booktitle}{{\em Proceedings of the 7th
+  ACM conference on Recommender systems}}. ACM, \bibinfo{pages}{65--68}.
 \newblock
 
 

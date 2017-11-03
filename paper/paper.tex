@@ -60,12 +60,21 @@ Latent vector-based recommender models commonly represent users with a single la
 
 In all these cases, trying to capture the user's taste in a single latent vector is suboptimal. Firstly, it may lead to lack of nuance in representing the user, where a dominant taste may overpower more niche ones. Secondly it may reduce the quality of item representations, especially when it leads to decreasing the separation in the embedding space between groups of items belonging to multiple tastes or genres. For illustration, suppose that documentaries and horror movies are distinct genres, in the sense that most users prefer one or the other: but that there is still a group of users who like both. To represent that group of users, the genres' embeddings will have to be separated less cleanly than they would be if the model could express the concept of multiple tastes. In general, these problems are similar to that of fitting a unimodal distributional model to bimodal data; for Gaussians, the resulting fitted distribution will be a poor model of the data, and the majority of its density mass will coincide with neither of the true modes.
 
+\section{Related work}
+The idea of moving beyond point embeddings has yielded some interesting results, particularly in the natural language modelling domain.
+
+\citet{vilnis2014word} embed words as Gaussian distributions, rather than point embeddings. This improves the resulting representations in two ways. Firstly, the resulting representation provides a natural way of expressing uncertainty about the learned representation. Secondly, large (and non-spherical) variances aid the representation of polysemous words. In the context of recommendations, Gausian embeddings with large variances could be used to represent users with wide-ranging tastes.
+
+\citet{athiwaratkun2017multimodal} extend this idea by representing words a mixtures of Gaussians. This allows them to capture polysemy by modelling each word with several distinct, small-variance Gaussian distributions (rather than artificially inflating the variance of a single distribution). This allows much clearer separation of distinct meanings. This work is closest to the approach presented here.
+
+In the recommender system literature, the idea of using multiple embeddings to represent a user's multiple interests is presented in \citet{weston2013nonlinear}. In this approach, the recommendation score of an item for a given user is given by the \emph{maximum} of the dot products of the item embedding and each of the user's embedding vectors. This obviates the need for explicit modelling of mixture probabilities, which reduces the number of model parameters and makes evaluation more efficient. However, the model is potentially disadvantaged by its inability to model strong \emph{dis}taste for a given class of items.
+
 \section{Model}
 Let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user $i$, and $A_i$ be a $m \times k$ matrix representing the affinities of each taste for representing particular items. The recommendation score for item $j$, represented by a $k times 1$-dimensional embedding vector $e_j$, is then given by
 \begin{equation}
-  r_{ij} = \sigma \left(A_ie_j\right) \cdot U_ie_j,
+  r_{ij} = \sigma\left(A_ie_j\right) \cdot U_ie_j,
 \end{equation}
-where $\sigma$ is the elementwise sigmoid function $\frac{1}{1 + e^{-x}}$.
+where $\sigma$ is the elementwise sigmoid function, $\sigma\left(A_ie_j\right)$ gives the mixture probabilities, and $U_ie_j$ the recommendation scores output by each mixture component. We assume identity variance matrices for all mixture components.
 
 This gives a mixture of tastes, where the contribution of each individual tastes component is weighted by how competent it is in evaluating item $j$.
 
