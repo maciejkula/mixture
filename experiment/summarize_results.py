@@ -1,4 +1,5 @@
-from mixture.results import (generate_hyperparameter_table,
+from mixture.results import (generate_dataset_table,
+                             generate_hyperparameter_table,
                              generate_performance_table,
                              plot_hyperparam_search,
                              read_results)
@@ -13,3 +14,4 @@ if __name__ == '__main__':
 
     print(generate_performance_table(sequence, factorization))
     print(generate_hyperparameter_table(sequence, factorization))
+    print(generate_dataset_table())

@@ -12,6 +12,9 @@ import seaborn as sns
 
 from tabulate import tabulate
 
+from spotlight.datasets.movielens import get_movielens_dataset
+from spotlight.datasets.goodbooks import get_goodbooks_dataset
+from spotlight.datasets.amazon import get_amazon_dataset
 
 sns.set_style('ticks', {'font.family': 'serif', 'axes.linewidth': 0.8})
 sns.set_context('paper', font_scale=0.8)
@@ -224,3 +227,29 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
 
     fig.tight_layout()
     fig.savefig('hyperparam_search.eps')
+
+
+def generate_dataset_table():
+
+    headers = ['Dataset', 'Users', 'Items', 'Interactions', 'Density']
+
+    rows = []
+
+    for name, dataset in (('Movielens 10M', get_movielens_dataset('10M')),
+                          ('Amazon', get_amazon_dataset()),
+                          ('Goodbooks-10K', get_goodbooks_dataset())):
+
+        row = [
+            name,
+            '{:0,}'.format(dataset.num_users),
+            '{:0,}'.format(dataset.num_items),
+            '{:0,}'.format(len(dataset)),
+            len(dataset) / dataset.num_users / dataset.num_items
+        ]
+
+        rows.append(row)
+
+    return tabulate(rows,
+                    headers=headers,
+                    floatfmt='.4f',
+                    tablefmt='latex_booktabs')

@@ -119,6 +119,21 @@ We use the following datasets in out experiments.
 
 We treat all datasets as implicit feedback datasets, where the existence of an edge between a user and an item expresses implicit preference, and the lack of an edge implicit lack of preference.
 
+\begin{table}
+  \caption{Dataset statistics}
+  \label{tab:datasets}
+\begin{tabular}{llllr}
+\toprule
+ Dataset       & Users   & Items   & Interactions   &   Density \\
+\midrule
+ Movielens 10M & 71,568  & 65,134  & 10,000,054     &    0.0021 \\
+ Amazon        & 100,085 & 113,997 & 3,944,862      &    0.0003 \\
+ Goodbooks-10K & 53,425  & 10,001  & 5,976,479      &    0.0112 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
 \subsection{Experimental setup}
 For factorization models, we split the interaction datasets randomly into train, validation, and test sets. We use 80\% of interactions for training, and 10\% each for validation and testing. We make no effort to ensure that all items and users in the validation and test sets have a minimum number of training interactions. Our results therefore represent partial cold-start conditions.
 
