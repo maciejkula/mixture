@@ -1,6 +1,7 @@
-\documentclass[sigchi]{acmart}
+\documentclass[sigconf]{acmart}
 
 \usepackage{booktabs}
+\usepackage{subcaption}
 \usepackage{commath}
 \usepackage{threeparttable}
 
@@ -60,6 +61,10 @@ Latent vector-based recommender models commonly represent users with a single la
 
 In all these cases, trying to capture the user's taste in a single latent vector is suboptimal. Firstly, it may lead to lack of nuance in representing the user, where a dominant taste may overpower more niche ones. Secondly it may reduce the quality of item representations, especially when it leads to decreasing the separation in the embedding space between groups of items belonging to multiple tastes or genres. For illustration, suppose that documentaries and horror movies are distinct genres, in the sense that most users prefer one or the other: but that there is still a group of users who like both. To represent that group of users, the genres' embeddings will have to be separated less cleanly than they would be if the model could express the concept of multiple tastes. In general, these problems are similar to that of fitting a unimodal distributional model to bimodal data; for Gaussians, the resulting fitted distribution will be a poor model of the data, and the majority of its density mass will coincide with neither of the true modes.
 
+In this paper, we propose and evaluate representing users as mixtures of several distinct tastes, represented by distinct taste vectors. Each of the taste vectors is coupled with an attention vector, describing how competent it is at evaluating any given item. The user's preference is then modelled as a weighted average of all the user's tastes, with the weights given by how relevant each taste is to evaluating a given item.
+
+We apply this model to both traditional implicit feedback factorization models, and to more recent models using recurrent neural networks. In both cases, our mixture-of-interests models handily outperform single-representation models on standard ranking quality metrics. In the case of deep recurrent sequence models, this improvement is achieved at a very modest cost to to the model complexity, making our model a straightforward improvement over existing methods.
+
 \section{Related work}
 The idea of moving beyond point embeddings has yielded some interesting results, particularly in the natural language modelling domain.
 
@@ -89,7 +94,7 @@ Given $z_{it}$, the $m$-th row of $U_{it}$ and $A_{it}$ is given by
   a^m_{it} &= W^A_mz_{it} + B^A_m,\\
 \end{aligned}
 \end{equation}
-where $W^U_m$, $W^A_M$, $B^U_m$, and $B^A_m$ are the learned projection matrices. These are common across all users, representing a modest increase in the total number of model parameters.
+where $W^U_m$, $W^A_M$, $B^U_m$, and $B^A_m$ are the learned projection matrices. These are common across all users, representing a modest increase in the total number of model parameters. Note that the LSTM network only needs to be run once to obtain the full user representation.
 
 The Projection Mixture factorization model is similar: an embedding $z_i$ is estimated for each user, and the $U_i$ and $A_i$ matrices are obtained via linear projections:
 \begin{equation}
@@ -146,7 +151,7 @@ We use random search to tune the algorthms used in our experiments. We optimize 
 \subsection{Hyperparameter search}
 Figure~\ref{fig:hyper} plots the maximum test MRR obtained by each of our algorithms as a function of the number of elapsed hyperparameter search iterations.
 
-\begin{table*}[htbp]
+\begin{table}[htbp]
 \begin{threeparttable}
 \caption{Experimental results}
 \label{tb:results}
@@ -172,7 +177,38 @@ Figure~\ref{fig:hyper} plots the maximum test MRR obtained by each of our algori
 }
 \end{tablenotes}
 \end{threeparttable}
-\end{table*}
+\end{table}
+
+\begin{table}
+\caption{Effect of number of mixture components}
+\label{tab:nummixtures}
+\begin{subtable}{\columnwidth}
+\caption{Sequence models}
+\begin{tabular}{rrrr}
+\toprule
+   Mixture components &   Movielens 10M &   Amazon &   Goodbooks-10K \\
+\midrule
+                    2 &          0.0921 &   0.1538 &          0.1262 \\
+                    4 &          0.0999 &   0.1689 &          0.1304 \\
+                    6 &          0.0991 &   0.1889 &          0.1358 \\
+                    8 &          0.0982 &   0.1865 &          0.1327 \\
+\bottomrule
+\end{tabular}
+\end{subtable}
+\begin{subtable}{\columnwidth}
+\caption{Factorization models}
+\begin{tabular}{rrrr}
+\toprule
+   Mixture components &   Movielens 10M &   Amazon &   Goodbooks-10K \\
+\midrule
+                    2 &          0.0952 &   0.1343 &          0.0797 \\
+                    4 &          0.0952 &   0.1583 &          0.0840 \\
+                    6 &          0.0913 &   0.1612 &          0.0811 \\
+                    8 &          0.0907 &   0.1696 &          0.0853 \\
+\bottomrule
+\end{tabular}
+\end{subtable}\end{table}
+
 
 \begin{figure*}[h]
   \caption{Hyperparameter search}
