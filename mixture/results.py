@@ -13,8 +13,8 @@ import seaborn as sns
 from tabulate import tabulate
 
 
-sns.set_style({'font.family': 'serif'})
-sns.set_context('paper')
+sns.set_style('ticks', {'font.family': 'serif', 'axes.linewidth': 0.8})
+sns.set_context('paper', font_scale=0.8)
 
 
 class Result:
@@ -128,7 +128,7 @@ def generate_performance_table(sequence, factorization):
 
 def generate_hyperparameter_table(sequence, factorization):
 
-    headers = ['Mixture components', 'Movielens 10M', 'Amazon', 'Goodbooks-10K']
+    headers = ['Components', 'Movielens 10M', 'Amazon', 'Goodbooks-10K']
 
     outputs = []
 

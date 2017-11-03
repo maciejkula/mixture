@@ -81,6 +81,19 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Leskovec, Adamic, and Huberman}{Leskovec
+  et~al\mbox{.}}{2007}]%
+        {leskovec2007dynamics}
+\bibfield{author}{\bibinfo{person}{Jure Leskovec}, \bibinfo{person}{Lada~A
+  Adamic}, {and} \bibinfo{person}{Bernardo~A Huberman}.}
+  \bibinfo{year}{2007}\natexlab{}.
+\newblock \showarticletitle{The dynamics of viral marketing}.
+\newblock \bibinfo{journal}{{\em ACM Transactions on the Web (TWEB)\/}}
+  \bibinfo{volume}{1}, \bibinfo{number}{1} (\bibinfo{year}{2007}),
+  \bibinfo{pages}{5}.
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Melis, Dyer, and Blunsom}{Melis
   et~al\mbox{.}}{2017}]%
         {melis2017state}
