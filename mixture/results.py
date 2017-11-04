@@ -93,13 +93,12 @@ def read_results(path, variant):
 
 def generate_performance_table(sequence, factorization):
 
-    headers = ['Model', 'Movielens 10M', 'Amazon', 'Goodbooks-10K']
+    headers = ['Model', 'Movielens 10M', 'Amazon', 'Goodbooks']
     datasets = ('10M', 'amazon', 'goodbooks')
     rows = []
 
     for (model_name, model) in (('LSTM', 'lstm'),
-                                ('Mixture-LSTM', 'mixture'),
-                                ('Linear Mixture-LSTM', 'linear_mixture')):
+                                ('Mixture-LSTM', 'mixture')):
 
         row = [model_name]
 
@@ -131,7 +130,7 @@ def generate_performance_table(sequence, factorization):
 
 def generate_hyperparameter_table(sequence, factorization):
 
-    headers = ['Components', 'Movielens 10M', 'Amazon', 'Goodbooks-10K']
+    headers = ['Components', 'Movielens 10M', 'Amazon', 'Goodbooks']
 
     outputs = []
 
@@ -182,7 +181,7 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
 
     dataset_names = {'10M': 'Movielens 10M',
                      'amazon': 'Amazon',
-                     'goodbooks': 'Goodbooks-10K'}
+                     'goodbooks': 'Goodbooks'}
 
     for (i, (dataset, ax)) in enumerate(zip(('10M', 'amazon', 'goodbooks'),
                                             sequence_axes)):
@@ -226,7 +225,8 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
             ax.legend()
 
     fig.tight_layout()
-    fig.savefig('hyperparam_search.eps')
+
+    return fig
 
 
 def generate_dataset_table():
@@ -237,7 +237,7 @@ def generate_dataset_table():
 
     for name, dataset in (('Movielens 10M', get_movielens_dataset('10M')),
                           ('Amazon', get_amazon_dataset()),
-                          ('Goodbooks-10K', get_goodbooks_dataset())):
+                          ('Goodbooks', get_goodbooks_dataset())):
 
         row = [
             name,
