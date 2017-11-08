@@ -76,7 +76,9 @@ The idea of moving beyond point embeddings has yielded some interesting results,
 In the recommender system literature, the idea of using multiple embeddings to represent a user's multiple interests is presented in \citet{weston2013nonlinear}. In this approach, the recommendation score of an item for a given user is given by the \emph{maximum} of the dot products of the item embedding and each of the user's embedding vectors. This obviates the need for explicit modelling of mixture probabilities, which reduces the number of model parameters and makes evaluation more efficient. However, the model is potentially disadvantaged by its inability to model strong \emph{dis}taste for a given class of items.
 
 \section{Model}
-Let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user $i$, and $A_i$ be a $m \times k$ matrix representing the affinities of each taste for representing particular items. The recommendation score for item $j$, represented by a $k times 1$-dimensional embedding vector $e_j$, is then given by
+We propose three variants of the mixture-of-tasets model, covering both recurrent models and traditional factorization models. The \textbf{Mixture-LSTM} model uses a long-short term memory network (LSTM, \cite{hochreiter1997long}) followed by linear projection layers to obtain the mixture-of-tastes representation. By using a recurrent architecture, we capture both information from both the identity of the items the user interacted with as well as the order in which those interactions occurred. The \textbf{Projection Mixture} model . It is, however, sequence-oblivious, and . The \textbf{Embedding Mixture} model differs by directly embedding all the mixture parameters for each user.
+
+Formally, let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user $i$, and $A_i$ be a $m \times k$ matrix representing the affinities of each taste for representing particular items. The recommendation score for item $j$, represented by a $k times 1$-dimensional embedding vector $e_j$, is then given by
 \begin{equation}
   r_{ij} = \sigma\left(A_ie_j\right) \cdot U_ie_j,
 \end{equation}
@@ -86,6 +88,7 @@ This gives a mixture of tastes, where the contribution of each individual tastes
 
 How $U_i$ and $A_i$ are obtained differs between the three evaluated models. In the Mixture-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state of an LSTM layer trained on the user's previous interactions, $z_{it}$:
 \begin{equation}
+  \label{eq:lstm}
   z_{it} = \mathrm{LSTM}\left(e_{i1}, e_{i2}, \ldots, e_{it}\right).
 \end{equation}
 Given $z_{it}$, the $m$-th row of $U_{it}$ and $A_{it}$ is given by
@@ -125,6 +128,9 @@ We treat all datasets as implicit feedback datasets, where the existence of an e
   \label{tab:datasets}
   \input{includes/datasets.tex}
 \end{table}
+
+\subsection{Baselines}
+Our baselines are exact equivalents of the mixture models, differing only in the fact that they represent the user with a single $k$-dimensional vector. For sequence-based models, we use an LSTM architecture and represent the user directly with the last hidden state of the network ($z_{it}$ from equation \ref{eq:lstm}). For factorization models, we use a standard latent embedding vector, corresponding directly to $z_i$ from the projection mixture model. This makes the baselines model particularly suitable for evaluating mixture-of-tastes representations: adding multiple tastes is the only source of any performance differences between the models.
 
 
 \subsection{Experimental setup}

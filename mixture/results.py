@@ -36,6 +36,7 @@ def summarize_trials(trials):
 
     for model_type in ('pooling', 'lstm',
                        'mixture', 'mixture2',
+                       'mixture_init',
                        'linear_mixture', 'diversified_mixture',
                        'diversified_mixture_fixed',
                        'embedding_mixture',

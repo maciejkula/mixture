@@ -22,45 +22,45 @@ Warning--empty publisher in weston2013nonlinear
 Warning--empty address in weston2013nonlinear
 Warning--no number and no volume in goodbooks2017
 Warning--page numbers missing in both pages and numpages fields in goodbooks2017
-You've used 11 entries,
+You've used 12 entries,
             5706 wiz_defined-function locations,
-            1367 strings with 16944 characters,
-and the built_in function-call counts, 11774 in all, are:
-= -- 1634
-> -- 411
+            1374 strings with 17069 characters,
+and the built_in function-call counts, 13038 in all, are:
+= -- 1841
+> -- 449
 < -- 0
-+ -- 126
-- -- 140
-* -- 773
-:= -- 1176
-add.period$ -- 56
-call.type$ -- 11
-change.case$ -- 71
-chr.to.int$ -- 11
-cite$ -- 27
-duplicate$ -- 939
-empty$ -- 695
-format.name$ -- 176
-if$ -- 3005
++ -- 138
+- -- 156
+* -- 850
+:= -- 1297
+add.period$ -- 61
+call.type$ -- 12
+change.case$ -- 77
+chr.to.int$ -- 12
+cite$ -- 28
+duplicate$ -- 1033
+empty$ -- 764
+format.name$ -- 196
+if$ -- 3339
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 48
-newline$ -- 125
-num.names$ -- 88
-pop$ -- 459
+missing$ -- 52
+newline$ -- 133
+num.names$ -- 96
+pop$ -- 493
 preamble$ -- 1
-purify$ -- 126
+purify$ -- 137
 quote$ -- 0
-skip$ -- 324
+skip$ -- 361
 stack$ -- 0
-substring$ -- 723
-swap$ -- 75
+substring$ -- 826
+swap$ -- 88
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 232
+type$ -- 248
 warning$ -- 16
-while$ -- 81
+while$ -- 92
 width$ -- 0
-write$ -- 224
+write$ -- 241
 (There were 16 warnings)

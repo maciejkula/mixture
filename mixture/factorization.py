@@ -34,8 +34,13 @@ def hyperparameter_space():
                 'type': 'bilinear',
                 **common_space
             },
+            # {
+            #     'type': 'mixture',
+            #     **common_space
+            # },
             {
-                'type': 'mixture',
+                'type': 'mixture_init',
+                'projection_scale': hp.quniform('projection_scale', 5, 50, 5),
                 **common_space
             },
             {
@@ -71,6 +76,12 @@ def get_objective(train, validation, test):
         elif h['type'] == 'mixture':
             representation = MixtureNet(train.num_users,
                                         train.num_items,
+                                        num_components=int(h['num_components']),
+                                        embedding_dim=int(h['embedding_dim']))
+        elif h['type'] == 'mixture_init':
+            representation = MixtureNet(train.num_users,
+                                        train.num_items,
+                                        projection_scale=h['projection_scale'],
                                         num_components=int(h['num_components']),
                                         embedding_dim=int(h['embedding_dim']))
         elif h['type'] == 'nonlinear_mixture':

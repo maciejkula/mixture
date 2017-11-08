@@ -60,6 +60,17 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Hochreiter and Schmidhuber}{Hochreiter and
+  Schmidhuber}{1997}]%
+        {hochreiter1997long}
+\bibfield{author}{\bibinfo{person}{Sepp Hochreiter} {and}
+  \bibinfo{person}{J{\"u}rgen Schmidhuber}.} \bibinfo{year}{1997}\natexlab{}.
+\newblock \showarticletitle{Long short-term memory}.
+\newblock \bibinfo{journal}{{\em Neural computation\/}} \bibinfo{volume}{9},
+  \bibinfo{number}{8} (\bibinfo{year}{1997}), \bibinfo{pages}{1735--1780}.
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Hu, Koren, and Volinsky}{Hu
   et~al\mbox{.}}{2008}]%
         {hu2008collaborative}

@@ -40,12 +40,14 @@ class MixtureNet(nn.Module):
     """
 
     def __init__(self, num_users, num_items, embedding_dim=32,
+                 projection_scale=1.0,
                  num_components=4):
 
         super(MixtureNet, self).__init__()
 
         self.embedding_dim = embedding_dim
         self.num_components = num_components
+        self.projection_scale = projection_scale
 
         self.user_embeddings = ScaledEmbedding(num_users, embedding_dim)
         self.item_embeddings = ScaledEmbedding(num_items, embedding_dim)
@@ -59,8 +61,8 @@ class MixtureNet(nn.Module):
                                               embedding_dim * self.num_components, bias=False)
 
         for layer in (self.taste_projection, self.attention_projection):
-            torch.nn.init.xavier_normal(layer.weight, 0.1)
-            
+            torch.nn.init.xavier_normal(layer.weight, self.projection_scale)
+
     def forward(self, user_ids, item_ids):
         """
         Compute the forward pass of the representation.
