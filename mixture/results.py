@@ -92,11 +92,20 @@ def read_results(path, variant):
     return results
 
 
+def _full_width_table(tex):
+
+    return (tex
+            .replace('tabular', 'tabularx')
+            .replace('\\begin{tabularx}', '\\begin{tabularx}{\\columnwidth}'))
+
+
 def generate_performance_table(sequence, factorization):
 
     headers = ['Model', 'Movielens 10M', 'Amazon', 'Goodbooks']
     datasets = ('10M', 'amazon', 'goodbooks')
     rows = []
+
+    outputs = []
 
     for (model_name, model) in (('LSTM', 'lstm'),
                                 ('Mixture-LSTM', 'mixture')):
@@ -108,6 +117,15 @@ def generate_performance_table(sequence, factorization):
             row.append(mrr)
 
         rows.append(row)
+
+    outputs.append(
+        tabulate(rows,
+                 headers=headers,
+                 floatfmt='.4f',
+                 tablefmt='latex_booktabs')
+    )
+
+    rows = []
 
     for (model_name, model) in (('Bilinear', 'bilinear'),
                                 ('Projection Mixture', 'mixture'),
@@ -121,12 +139,30 @@ def generate_performance_table(sequence, factorization):
 
         rows.append(row)
 
+    outputs.append(
+        tabulate(rows,
+                 headers=headers,
+                 floatfmt='.4f',
+                 tablefmt='latex_booktabs')
+    )
+
     output = tabulate(rows,
                       headers=headers,
                       floatfmt='.4f',
                       tablefmt='latex_booktabs')
 
-    return output.replace('Bilinear', '\midrule\n Bilinear')
+    sequence_table, factorization_table = outputs
+
+    return _full_width_table(
+        '\\begin{subtable}{\\columnwidth}\n'
+        '\\caption{Sequence models}\n'
+        '%s\n'
+        '\\end{subtable}\n'
+        '\\hspace{\\fill}\n'
+        '\\begin{subtable}{\\columnwidth}\n'
+        '\\caption{Factorization models}\n'
+        '%s\n'
+        '\\end{subtable}' % (sequence_table, factorization_table))
 
 
 def generate_hyperparameter_table(sequence, factorization):
@@ -160,18 +196,20 @@ def generate_hyperparameter_table(sequence, factorization):
 
     sequence_table, factorization_table = outputs
 
-    return ('\\begin{table}\n'
-            '\\caption{Effect of number of mixture components}\n'
-            '\\label{tab:nummixtures}\n'
-            '\\begin{subtable}{\\columnwidth}\n'
-            '\\caption{Sequence models}\n'
-            '%s\n'
-            '\\end{subtable}\n'
-            '\\begin{subtable}{\\columnwidth}\n'
-            '\\caption{Factorization models}\n'
-            '%s\n'
-            '\\end{subtable}'
-            '\\end{table}' % (sequence_table, factorization_table))
+    return _full_width_table(
+        '\\begin{table}\n'
+        '\\caption{Effect of number of mixture components}\n'
+        '\\label{tab:nummixtures}\n'
+        '\\begin{subtable}{\\columnwidth}\n'
+        '\\caption{Sequence models}\n'
+        '%s\n'
+        '\\end{subtable}\n'
+        '\\hspace{\\fill}\n'
+        '\\begin{subtable}{\\columnwidth}\n'
+        '\\caption{Factorization models}\n'
+        '%s\n'
+        '\\end{subtable}'
+        '\\end{table}' % (sequence_table, factorization_table))
 
 
 def plot_hyperparam_search(sequence, factorization, max_iter=100):
@@ -250,7 +288,8 @@ def generate_dataset_table():
 
         rows.append(row)
 
-    return tabulate(rows,
-                    headers=headers,
-                    floatfmt='.4f',
-                    tablefmt='latex_booktabs')
+    return _full_width_table(
+        tabulate(rows,
+                 headers=headers,
+                 floatfmt='.4f',
+                 tablefmt='latex_booktabs'))
