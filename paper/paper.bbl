@@ -60,6 +60,19 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Hidasi, Karatzoglou, Baltrunas, and
+  Tikk}{Hidasi et~al\mbox{.}}{2015}]%
+        {hidasi2015session}
+\bibfield{author}{\bibinfo{person}{Bal{\'a}zs Hidasi},
+  \bibinfo{person}{Alexandros Karatzoglou}, \bibinfo{person}{Linas Baltrunas},
+  {and} \bibinfo{person}{Domonkos Tikk}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{Session-based recommendations with recurrent neural
+  networks}.
+\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1511.06939\/}}
+  (\bibinfo{year}{2015}).
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Hochreiter and Schmidhuber}{Hochreiter and
   Schmidhuber}{1997}]%
         {hochreiter1997long}
@@ -118,6 +131,17 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Paszke, Gross, Chintala, et~al\mbox{.}}{Paszke
+  et~al\mbox{.}}{2017}]%
+        {paszke2017pytorch}
+\bibfield{author}{\bibinfo{person}{Adam Paszke}, \bibinfo{person}{Sam Gross},
+  \bibinfo{person}{Soumith Chintala}, {et~al\mbox{.}}}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{title}{PyTorch}.
+\newblock   (\bibinfo{year}{2017}).
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Rendle, Freudenthaler, Gantner, and
   Schmidt-Thieme}{Rendle et~al\mbox{.}}{2009}]%
         {rendle2009bpr}
@@ -162,6 +186,18 @@
 \newblock \showarticletitle{Nonlinear latent factorization by embedding
   multiple user interests}. In \bibinfo{booktitle}{{\em Proceedings of the 7th
   ACM conference on Recommender systems}}. ACM, \bibinfo{pages}{65--68}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Wu, Ahmed, Beutel, Smola, and Jing}{Wu
+  et~al\mbox{.}}{2017}]%
+        {wu2017recurrent}
+\bibfield{author}{\bibinfo{person}{Chao-Yuan Wu}, \bibinfo{person}{Amr Ahmed},
+  \bibinfo{person}{Alex Beutel}, \bibinfo{person}{Alexander~J Smola}, {and}
+  \bibinfo{person}{How Jing}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Recurrent recommender networks}. In
+  \bibinfo{booktitle}{{\em Proceedings of the Tenth ACM International
+  Conference on Web Search and Data Mining}}. ACM, \bibinfo{pages}{495--503}.
 \newblock
 
 

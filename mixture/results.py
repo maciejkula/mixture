@@ -270,7 +270,7 @@ def plot_hyperparam_search(sequence, factorization, max_iter=100):
 
 def generate_dataset_table():
 
-    headers = ['Dataset', 'Users', 'Items', 'Interactions', 'Density']
+    headers = ['Dataset', 'Users', 'Items', 'Density', '95th/50th']
 
     rows = []
 
@@ -278,12 +278,17 @@ def generate_dataset_table():
                           ('Amazon', get_amazon_dataset()),
                           ('Goodbooks', get_goodbooks_dataset())):
 
+        item_counts = dataset.tocoo().getnnz(axis=1)
+
+        print('Dataset {}, ratio: {:0,}'
+              .format(name, np.percentile(item_counts, 95) / np.percentile(item_counts, 50)))
+
         row = [
             name,
             '{:0,}'.format(dataset.num_users),
             '{:0,}'.format(dataset.num_items),
-            '{:0,}'.format(len(dataset)),
-            len(dataset) / dataset.num_users / dataset.num_items
+            len(dataset) / dataset.num_users / dataset.num_items,
+            '{0:.2f}'.format(np.percentile(item_counts, 95) / np.percentile(item_counts, 50))
         ]
 
         rows.append(row)
