@@ -95,6 +95,16 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Kingma and Ba}{Kingma and Ba}{2014}]%
+        {kingma2014adam}
+\bibfield{author}{\bibinfo{person}{Diederik Kingma} {and}
+  \bibinfo{person}{Jimmy Ba}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Adam: A method for stochastic optimization}.
+\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1412.6980\/}}
+  (\bibinfo{year}{2014}).
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Koren}{Koren}{2009}]%
         {koren2009bellkor}
 \bibfield{author}{\bibinfo{person}{Yehuda Koren}.}

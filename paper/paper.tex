@@ -1,4 +1,4 @@
-\documentclass[sigconf]{acmart}
+\documentclass[sigchi]{acmart}
 
 \usepackage{booktabs}
 \usepackage{subcaption}
@@ -52,7 +52,7 @@
 
 
 \begin{abstract}
-Most existing recommendation approaches implicitly treat user tastes as unimodal, resulting in an average-of-tastes representations when multiple distinct interests are present. We show that appropriately modelling the multi-faceted nature of user tastes through a mixture-of-tastes model leads to large increases in recommendation quality. Our result holds both for deep sequence-based and traditional factorization models. In sequence-based models, this improvement is achieved at a very modest cost in model complexity, making mixture-of-tastes models a straightforward improvement on existing baselines.
+Most existing recommendation approaches implicitly treat user tastes as unimodal, resulting in an average-of-tastes representations when multiple distinct interests are present. We show that appropriately modelling the multi-faceted nature of user tastes through a mixture-of-tastes model leads to large increases in recommendation quality. Our result holds both for deep sequence-based and traditional factorization models, and is robust to careful selection and tuning of baseline models. In sequence-based models, this improvement is achieved at a very modest cost in model complexity, making mixture-of-tastes models a straightforward improvement on existing baselines.
 \end{abstract}
 
 \maketitle
@@ -67,10 +67,12 @@ In this paper, we propose and evaluate representing users as mixtures of several
 
 We apply this model to both traditional implicit feedback factorization models, and to more recent models using recurrent neural networks. In both cases, our mixture-of-interests models handily outperform single-representation models on standard ranking quality metrics. In the case of deep recurrent sequence models, this improvement is achieved at a very modest cost to to the model complexity, making our model a straightforward improvement over existing methods.
 
+Throughout, we take a take great care to select and carefully tune our baseline models.
+
 \section{Related work}
 The idea of moving beyond point embeddings has yielded some interesting results, particularly in the natural language modelling domain.
 
-\citet{vilnis2014word} embed words as Gaussian distributions, rather than point embeddings. This improves the resulting representations in two ways. Firstly, the resulting representation provides a natural way of expressing uncertainty about the learned representation. Secondly, large (and non-spherical) variances aid the representation of polysemous words. In the context of recommendations, Gausian embeddings with large variances could be used to represent users with wide-ranging tastes.
+\citet{vilnis2014word} embed words as Gaussian distributions, rather than point embeddings. This improves the resulting representations in two ways. Firstly, the resulting representation provides a natural way of expressing uncertainty about the learned representation. Secondly, large (and non-spherical) variances aid the representation of polysemous words. In the context of recommendations, Gaussian embeddings with large variances could be used to represent users with wide-ranging tastes.
 
 \citet{athiwaratkun2017multimodal} extend this idea by representing words a mixtures of Gaussians. This allows them to capture polysemy by modelling each word with several distinct, small-variance Gaussian distributions (rather than artificially inflating the variance of a single distribution). This allows much clearer separation of distinct meanings. This work is closest to the approach presented here.
 
@@ -127,11 +129,11 @@ We use the following datasets in our experiments (their summary statistics are l
 \item Goodbooks: dataset of 6 million ratings across 53,000 users and 10,000 most popular books from the Goodbooks online book recommendation and sharing service \citep{goodbooks2017}.
 \item Amazon: dataset of ratings and reviews gathered from the Amazon online shopping service \citep{leskovec2007dynamics}. After pruning users and items with fewer than 10 ratings, the dataset contains approximately 4 million ratings from 100,000 users over 114,000 items.
 \end{enumerate}
+Throughout our experiments, we treat all datasets as implicit feedback datasets, where the existence of an edge between a user and an item expresses implicit preference, and the lack of an edge implicit lack of preference.
+
 The two key differences betweeen the datasets are their sparsity and the degree to which they are popularity-biased. The Movielens 10M and Goodbooks datasets are relatively dense, while the Amazon dataset is much sparser. Popularity seems to play a greater role in the Movielens dataset than in the other datasets: the ratio between the number of interactions that accrue to the 95th percentile and the 50th percentile of most popular items is highest in Movielens 10M.
 
 We conjecture that taste diversity plays a lesser role in highly popularity-biased datasets (that is, where a large share of all interactions go to very few items). Intuitively, a single dominant taste can model such observations quite well; additional tastes only come into play in the long tail of the distribution. Conversely, a more even distribution of interactions between items allows the possibility that multiple tastes play a larger role. If this is true, we would expect the gains from our mixture models to be larger in the Amazon (where tastes can span multiple unrelated item categories) and Goodbooks (where the popularity distribution is relatively even by construction) datasets than in the Movielens dataset.
-
-Throughout our experiments, we treat all datasets as implicit feedback datasets, where the existence of an edge between a user and an item expresses implicit preference, and the lack of an edge implicit lack of preference.
 
 \begin{table}
   \caption{Dataset statistics. $95th/50th$ denotes the ratio of popularity of the 95th and 50th percentile of item popularity.}
@@ -179,34 +181,38 @@ We perform extensive hyperparameter optimization across both our proposed models
 
 We use random search to tune the algorthms used in our experiments. We optimize batch size, number of training epochs, the learning rate, L2 regularization weight, the loss function, and (where appropriate) the number of taste mixture components.
 
-\section{Implementation}
-Our models are implemented using the PyTorch deep learning framework \citep{paszke2017pytorch} and trained using the nVidia K40 GPUs. We make the model and experiment code (as well as the full results) available on Github\footnote{\url{https://github.com/maciejkula/mixture}}.
+\subsection{Implementation}
+Our models are implemented using the PyTorch deep learning framework \citep{paszke2017pytorch} and trained using the nVidia K40 GPUs. All of the models are trained using the ADAM \citep{kingma2014adam} per-parameter learning rate schedule. We make the model and experiment code (as well as the full results) available on Github\footnote{\url{https://github.com/maciejkula/mixture}}.
 
 \section{Results}
 \begin{table}[htbp]
-\caption{Experimental results}
+\caption{Mean reciprocal rank across all users/sequences in the test set. Note that due to differences in experimental protocol, results between sequence-based and factorization models are not directly comparable.}
 \label{tb:results}
 \input{includes/performance.tex}
 \end{table}
-Our results are summarized in Table \ref{tb:results}.
+Our main results are summarized in Table \ref{tb:results}. In both sequence-based and factorization tasks variants of our model achieve consistently higher performance than baseline models, with improvements ranging from 10\% to 69\%. The results are robust to optimizing the hyperparameters of our baselines, giving us ample confidence that the results can be replicated in production recommender systems.
+
+\subsection{Ranking quality}
+In sequence-based models, our M-LSTM model outperforms the baseline LSTM model on all datasets. The performance gains are particularly large on the Amazon (26\%) datset and Goodbooks (17\%) datasets, and smaller, but still meaningful, on the Movielens 10M dataset (10\%). This is consistent with our conjectures on the nature of the datasets. The Amazon dataset, spanning the entire catalog of Amazon products, benefits most from being able to model taste diversity. This is not surprising, given that a single Amazon user can interact with products from many disparate domains.
+
+Among factorization models, the Embedding Mixture model is the best performing model in two datasets. It beats the baseline model by a very substantial margin on the Amazon dataset (69\%), and by a smaller margin of 12\% on the Goodbooks dataset. There is relatively little to distinguish the models on the Movielens dataset, where all three models perform equally well. Somewhat surprisngly, the Projection Mixture model fails to outperform the baseline on two datasets, and substantially \emph{underperforms} it on the Amazon dataset. Given that the model is strictly more expressive than the baseline model, we attribute this failure to difficulties in optimization that have eluded us despite experimenting with a number of initialization schemes and learning rate schedules.
 
 \subsection{Hyperparameter search}
-Figure~\ref{fig:hyper} plots the maximum test MRR achieved by each algorithm as a function of the number of elapsed hyperparameter search iterations. Both baseline and mixture models benefit from hyperparameter tuning. All algorithms converge to their optimum performance relatively quickly, suggesting a degree of robustness to hyperparameter choices. Mixture-LSTM and Embedding Mixture models quickly outperform their baseline counterparts, and maintain a stable performance lead thereafter. This lends support to our belief that the mixture models' superior accuracy reflects their greater capacity to model the recommendation problem well, rather than being an artifact of the experimental procedure or researcher bias.
-
-\subsection{Number of taste components}
-We summarize the effect of increasing the number of taste mixture components in Table~\ref{tab:nummixtures}. By and large, there is a dose-response relationship between the number of mixtures and recommendation quality: being able to represents more distinct user tasts yields better results.
-
-
-
-\input{includes/hyperparameters.tex}
-
-
 \begin{figure*}[h]
   \captionsetup{width=.8\linewidth}
   \caption{Maximum test MRR vs number of hyperparameter search iterations. Sequence-based models in the top row; factorization-based models in the bottom row.}
   \label{fig:hyper}
   \includegraphics[width=0.8\textwidth]{includes/hyperparam_search.pdf}
 \end{figure*}
+Our results are robust to hyperparameter optimization. Figure~\ref{fig:hyper} plots the maximum test MRR achieved by each algorithm as a function of the number of elapsed hyperparameter search iterations. Both baseline and mixture models benefit from hyperparameter tuning. All algorithms converge to their optimum performance relatively quickly, suggesting a degree of robustness to hyperparameter choices. Mixture-LSTM and Embedding Mixture models quickly outperform their baseline counterparts, and maintain a stable performance lead thereafter. This lends support to our belief that the mixture models' superior accuracy reflects their greater capacity to model the recommendation problem well, rather than being an artifact of the experimental procedure or researcher bias.
+
+\subsection{Number of taste components}
+\input{includes/hyperparameters.tex}
+We summarize the effect of increasing the number of taste mixture components in Table~\ref{tab:nummixtures}. By and large, there is a dose-response relationship between the number of mixtures and recommendation quality: being able to represents more distinct user tasts yields better results. The optimum number of components is dataset dependent: the (more diverse) Amazon and Goodbooks dataset tend to benefit more from additional expressiveness, while four mixture components seem to suffice in the more homogeneous Movielens dataset.
+
+
+\section{Conclusion}
+
 
 
 \bibliography{bibliography}
