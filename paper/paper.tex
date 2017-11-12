@@ -1,4 +1,43 @@
-\documentclass[sigchi]{acmart}
+\documentclass[letterpaper]{article}
+\usepackage{aaai}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{url}
+\usepackage{graphicx}
+\frenchspacing
+% Add additional packages here. The following
+% packages may NOT be used (this list
+% is not exhaustive:
+% authblk, caption, CJK, float, fullpage, geometry,
+%hyperref, layout, nameref, natbib, savetrees,
+%setspace, titlesec, tocbibind, ulem
+%
+
+%
+%
+% PDFINFO
+% You are required to complete the following
+% for pass-through to the PDF.
+% No LaTeX commands of any kind may be
+% entered. The parentheses and spaces
+% are an integral part of the
+% pdfinfo script and must not be removed.
+%
+\pdfinfo{
+/Title (Mixture-of-tastes Models for Representing Users with Diverse Interests)
+/Author (Maciej Kula)
+/Keywords (Recommender Systems, Matrix Factorization, Sequence-based Recommendations)
+}
+%
+%Section Numbers
+% Uncomment if you want to use section numbers
+% and change the 0 to a 1 or 2
+% \setcounter{secnumdepth}{0}
+% Title and Author Information Must Immediately Follow
+% the pdfinfo within the preamble
+%
+
 
 \usepackage{booktabs}
 \usepackage{subcaption}
@@ -6,6 +45,7 @@
 \usepackage{threeparttable}
 \usepackage{caption}
 \usepackage{tabularx}
+\usepackage{natbib}
 
 % --- Symbols
 \newcommand\symUserSet{U}
@@ -22,40 +62,44 @@
 
 \begin{document}
 
+%US Lettersize Paper Is Required
+
+
 \title{Mixture-of-tastes Models for Representing Users with Diverse Interests}
-\author{Maciej Kula}
-\email{maciej.kula@gmail.com}
+\author{Maciej Kula\\maciej.kula@gmail.com}
+%\email{maciej.kula@gmail.com}
 \date{\today}
-\settopmatter{printacmref=false, printccs=false, printfolios=true}
-\setcopyright{none}
-\acmConference[]{}{}{}
+%\settopmatter{printacmref=false, printccs=false, printfolios=true}
+%\setcopyright{none}
+%\acmConference[]{}{}{}
 
-\begin{CCSXML}
-<ccs2012>
-<concept>
-<concept_id>10002951.10003260.10003261.10003269</concept_id>
-<concept_desc>Information systems~Collaborative filtering</concept_desc>
-<concept_significance>500</concept_significance>
-</concept>
-<concept>
-<concept_id>10002951.10003317.10003338.10003346</concept_id>
-<concept_desc>Information systems~Top-k retrieval in databases</concept_desc>
-<concept_significance>500</concept_significance>
-</concept>
-</ccs2012>
-\end{CCSXML}
+%% \begin{CCSXML}
+%% <ccs2012>
+%% <concept>
+%% <concept_id>10002951.10003260.10003261.10003269</concept_id>
+%% <concept_desc>Information systems~Collaborative filtering</concept_desc>
+%% <concept_significance>500</concept_significance>
+%% </concept>
+%% <concept>
+%% <concept_id>10002951.10003317.10003338.10003346</concept_id>
+%% <concept_desc>Information systems~Top-k retrieval in databases</concept_desc>
+%% <concept_significance>500</concept_significance>
+%% </concept>
+%% </ccs2012>
+%% \end{CCSXML}
 
-\ccsdesc[500]{Information systems~Collaborative filtering}
-\ccsdesc[500]{Information systems~Top-k retrieval in databases}
+%\ccsdesc[500]{Information systems~Collaborative filtering}
+% \ccsdesc[500]{Information systems~Top-k retrieval in databases}
 
-\keywords{Recommender Systems, Matrix Factorization, Sequence-based Recommendations}
+% \keywords{Recommender Systems, Matrix Factorization, Sequence-based Recommendations}
+
+
+\maketitle
 
 
 \begin{abstract}
 Most existing recommendation approaches implicitly treat user tastes as unimodal, resulting in an average-of-tastes representations when multiple distinct interests are present. We show that appropriately modelling the multi-faceted nature of user tastes through a mixture-of-tastes model leads to large increases in recommendation quality. Our result holds both for deep sequence-based and traditional factorization models, and is robust to careful selection and tuning of baseline models. In sequence-based models, this improvement is achieved at a very modest cost in model complexity, making mixture-of-tastes models a straightforward improvement on existing baselines.
 \end{abstract}
-
-\maketitle
 
 
 \section{Introduction}
@@ -198,12 +242,14 @@ In sequence-based models, our M-LSTM model outperforms the baseline LSTM model o
 Among factorization models, the Embedding Mixture model is the best performing model in two datasets. It beats the baseline model by a very substantial margin on the Amazon dataset (69\%), and by a smaller margin of 12\% on the Goodbooks dataset. There is relatively little to distinguish the models on the Movielens dataset, where all three models perform equally well. Somewhat surprisngly, the Projection Mixture model fails to outperform the baseline on two datasets, and substantially \emph{underperforms} it on the Amazon dataset. Given that the model is strictly more expressive than the baseline model, we attribute this failure to difficulties in optimization that have eluded us despite experimenting with a number of initialization schemes and learning rate schedules.
 
 \subsection{Hyperparameter search}
-\begin{figure*}[h]
-  \captionsetup{width=.8\linewidth}
-  \caption{Maximum test MRR vs number of hyperparameter search iterations. Sequence-based models in the top row; factorization-based models in the bottom row.}
-  \label{fig:hyper}
-  \includegraphics[width=0.8\textwidth]{includes/hyperparam_search.pdf}
-\end{figure*}
+  \begin{figure*}[h]
+    \centering
+    \captionsetup{width=.8\linewidth}
+    \caption{Maximum test MRR vs number of hyperparameter search iterations. Sequence-based models in the top row; factorization-based models in the bottom row.}
+    \label{fig:hyper}
+    \includegraphics[width=0.8\textwidth]{includes/hyperparam_search.pdf}
+  \end{figure*}
+
 Our results are robust to hyperparameter optimization. Figure~\ref{fig:hyper} plots the maximum test MRR achieved by each algorithm as a function of the number of elapsed hyperparameter search iterations. Both baseline and mixture models benefit from hyperparameter tuning. All algorithms converge to their optimum performance relatively quickly, suggesting a degree of robustness to hyperparameter choices. Mixture-LSTM and Embedding Mixture models quickly outperform their baseline counterparts, and maintain a stable performance lead thereafter. This lends support to our belief that the mixture models' superior accuracy reflects their greater capacity to model the recommendation problem well, rather than being an artifact of the experimental procedure or researcher bias.
 
 \subsection{Number of taste components}
@@ -216,6 +262,6 @@ We show that mixture-of-tastes representations are clear improvements over their
 
 
 \bibliography{bibliography}
-\bibliographystyle{ACM-Reference-Format}
+\bibliographystyle{aaai}
 
 \end{document}

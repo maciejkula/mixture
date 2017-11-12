@@ -1,225 +1,119 @@
-%%% -*-BibTeX-*-
-%%% Do NOT edit. File created by BibTeX with style
-%%% ACM-Reference-Format-Journals [18-Jan-2012].
+\begin{thebibliography}{}
 
-\begin{thebibliography}{00}
+\bibitem[\protect\citeauthoryear{Athiwaratkun and
+  Wilson}{2017}]{athiwaratkun2017multimodal}
+Athiwaratkun, B., and Wilson, A.~G.
+\newblock 2017.
+\newblock Multimodal word distributions.
+\newblock {\em arXiv preprint arXiv:1704.08424}.
 
-%%% ====================================================================
-%%% NOTE TO THE USER: you can override these defaults by providing
-%%% customized versions of any of these macros before the \bibliography
-%%% command.  Each of them MUST provide its own final punctuation,
-%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
-%%% do not use final punctuation, in order to avoid confusing it with
-%%% the Web address.
-%%%
-%%% To suppress output of a particular field, define its macro to expand
-%%% to an empty string, or better, \unskip, like this:
-%%%
-%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
-%%%
-%%% \def \showDOI #1{\unskip}           % plain TeX syntax
-%%%
-%%% ====================================================================
+\bibitem[\protect\citeauthoryear{Harper and
+  Konstan}{2016}]{harper2016movielens}
+Harper, F.~M., and Konstan, J.~A.
+\newblock 2016.
+\newblock The movielens datasets: History and context.
+\newblock {\em ACM Transactions on Interactive Intelligent Systems (TiiS)}
+  5(4):19.
 
-\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
-\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
-\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
-\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
-\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
-\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
-\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
-\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
-\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
-% The following commands are used for tagged output and should be
-% invisible to TeX
-\providecommand\bibfield[2]{#2}
-\providecommand\bibinfo[2]{#2}
-\providecommand\natexlab[1]{#1}
-\providecommand\showeprint[2][]{arXiv:#2}
+\bibitem[\protect\citeauthoryear{Hidasi \bgroup et al\mbox.\egroup
+  }{2015}]{hidasi2015session}
+Hidasi, B.; Karatzoglou, A.; Baltrunas, L.; and Tikk, D.
+\newblock 2015.
+\newblock Session-based recommendations with recurrent neural networks.
+\newblock {\em arXiv preprint arXiv:1511.06939}.
 
-\bibitem[\protect\citeauthoryear{Athiwaratkun and Wilson}{Athiwaratkun and
-  Wilson}{2017}]%
-        {athiwaratkun2017multimodal}
-\bibfield{author}{\bibinfo{person}{Ben Athiwaratkun} {and}
-  \bibinfo{person}{Andrew~Gordon Wilson}.} \bibinfo{year}{2017}\natexlab{}.
-\newblock \showarticletitle{Multimodal Word Distributions}.
-\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1704.08424\/}}
-  (\bibinfo{year}{2017}).
-\newblock
+\bibitem[\protect\citeauthoryear{Hochreiter and
+  Schmidhuber}{1997}]{hochreiter1997long}
+Hochreiter, S., and Schmidhuber, J.
+\newblock 1997.
+\newblock Long short-term memory.
+\newblock {\em Neural computation} 9(8):1735--1780.
 
+\bibitem[\protect\citeauthoryear{Hu, Koren, and
+  Volinsky}{2008}]{hu2008collaborative}
+Hu, Y.; Koren, Y.; and Volinsky, C.
+\newblock 2008.
+\newblock Collaborative filtering for implicit feedback datasets.
+\newblock In {\em Data Mining, 2008. ICDM'08. Eighth IEEE International
+  Conference on},  263--272.
+\newblock Ieee.
 
-\bibitem[\protect\citeauthoryear{Harper and Konstan}{Harper and
-  Konstan}{2016}]%
-        {harper2016movielens}
-\bibfield{author}{\bibinfo{person}{F~Maxwell Harper} {and}
-  \bibinfo{person}{Joseph~A Konstan}.} \bibinfo{year}{2016}\natexlab{}.
-\newblock \showarticletitle{The movielens datasets: History and context}.
-\newblock \bibinfo{journal}{{\em ACM Transactions on Interactive Intelligent
-  Systems (TiiS)\/}} \bibinfo{volume}{5}, \bibinfo{number}{4}
-  (\bibinfo{year}{2016}), \bibinfo{pages}{19}.
-\newblock
+\bibitem[\protect\citeauthoryear{Kingma and Ba}{2014}]{kingma2014adam}
+Kingma, D., and Ba, J.
+\newblock 2014.
+\newblock Adam: A method for stochastic optimization.
+\newblock {\em arXiv preprint arXiv:1412.6980}.
 
+\bibitem[\protect\citeauthoryear{Koren}{2009}]{koren2009bellkor}
+Koren, Y.
+\newblock 2009.
+\newblock The bellkor solution to the netflix grand prize.
+\newblock {\em Netflix prize documentation} 81:1--10.
 
-\bibitem[\protect\citeauthoryear{Hidasi, Karatzoglou, Baltrunas, and
-  Tikk}{Hidasi et~al\mbox{.}}{2015}]%
-        {hidasi2015session}
-\bibfield{author}{\bibinfo{person}{Bal{\'a}zs Hidasi},
-  \bibinfo{person}{Alexandros Karatzoglou}, \bibinfo{person}{Linas Baltrunas},
-  {and} \bibinfo{person}{Domonkos Tikk}.} \bibinfo{year}{2015}\natexlab{}.
-\newblock \showarticletitle{Session-based recommendations with recurrent neural
-  networks}.
-\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1511.06939\/}}
-  (\bibinfo{year}{2015}).
-\newblock
+\bibitem[\protect\citeauthoryear{Leskovec, Adamic, and
+  Huberman}{2007}]{leskovec2007dynamics}
+Leskovec, J.; Adamic, L.~A.; and Huberman, B.~A.
+\newblock 2007.
+\newblock The dynamics of viral marketing.
+\newblock {\em ACM Transactions on the Web (TWEB)} 1(1):5.
 
+\bibitem[\protect\citeauthoryear{Melis, Dyer, and
+  Blunsom}{2017}]{melis2017state}
+Melis, G.; Dyer, C.; and Blunsom, P.
+\newblock 2017.
+\newblock On the state of the art of evaluation in neural language models.
+\newblock {\em arXiv preprint arXiv:1707.05589}.
 
-\bibitem[\protect\citeauthoryear{Hochreiter and Schmidhuber}{Hochreiter and
-  Schmidhuber}{1997}]%
-        {hochreiter1997long}
-\bibfield{author}{\bibinfo{person}{Sepp Hochreiter} {and}
-  \bibinfo{person}{J{\"u}rgen Schmidhuber}.} \bibinfo{year}{1997}\natexlab{}.
-\newblock \showarticletitle{Long short-term memory}.
-\newblock \bibinfo{journal}{{\em Neural computation\/}} \bibinfo{volume}{9},
-  \bibinfo{number}{8} (\bibinfo{year}{1997}), \bibinfo{pages}{1735--1780}.
-\newblock
+\bibitem[\protect\citeauthoryear{Paszke \bgroup et al\mbox.\egroup
+  }{2017}]{paszke2017pytorch}
+Paszke, A.; Gross, S.; Chintala, S.; et~al.
+\newblock 2017.
+\newblock Pytorch.
 
+\bibitem[\protect\citeauthoryear{Rendle \bgroup et al\mbox.\egroup
+  }{2009}]{rendle2009bpr}
+Rendle, S.; Freudenthaler, C.; Gantner, Z.; and Schmidt-Thieme, L.
+\newblock 2009.
+\newblock Bpr: Bayesian personalized ranking from implicit feedback.
+\newblock In {\em Proceedings of the twenty-fifth conference on uncertainty in
+  artificial intelligence},  452--461.
+\newblock AUAI Press.
 
-\bibitem[\protect\citeauthoryear{Hu, Koren, and Volinsky}{Hu
-  et~al\mbox{.}}{2008}]%
-        {hu2008collaborative}
-\bibfield{author}{\bibinfo{person}{Yifan Hu}, \bibinfo{person}{Yehuda Koren},
-  {and} \bibinfo{person}{Chris Volinsky}.} \bibinfo{year}{2008}\natexlab{}.
-\newblock \showarticletitle{Collaborative filtering for implicit feedback
-  datasets}. In \bibinfo{booktitle}{{\em Data Mining, 2008. ICDM'08. Eighth
-  IEEE International Conference on}}. Ieee, \bibinfo{pages}{263--272}.
-\newblock
+\bibitem[\protect\citeauthoryear{Vilnis and McCallum}{2014}]{vilnis2014word}
+Vilnis, L., and McCallum, A.
+\newblock 2014.
+\newblock Word representations via gaussian embedding.
+\newblock {\em arXiv preprint arXiv:1412.6623}.
 
+\bibitem[\protect\citeauthoryear{Weston, Bengio, and
+  Usunier}{2011}]{weston2011wsabie}
+Weston, J.; Bengio, S.; and Usunier, N.
+\newblock 2011.
+\newblock Wsabie: Scaling up to large vocabulary image annotation.
+\newblock In {\em IJCAI}, volume~11,  2764--2770.
 
-\bibitem[\protect\citeauthoryear{Kingma and Ba}{Kingma and Ba}{2014}]%
-        {kingma2014adam}
-\bibfield{author}{\bibinfo{person}{Diederik Kingma} {and}
-  \bibinfo{person}{Jimmy Ba}.} \bibinfo{year}{2014}\natexlab{}.
-\newblock \showarticletitle{Adam: A method for stochastic optimization}.
-\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1412.6980\/}}
-  (\bibinfo{year}{2014}).
-\newblock
+\bibitem[\protect\citeauthoryear{Weston, Weiss, and
+  Yee}{2013}]{weston2013nonlinear}
+Weston, J.; Weiss, R.~J.; and Yee, H.
+\newblock 2013.
+\newblock Nonlinear latent factorization by embedding multiple user interests.
+\newblock In {\em Proceedings of the 7th ACM conference on Recommender
+  systems},  65--68.
+\newblock ACM.
 
+\bibitem[\protect\citeauthoryear{Wu \bgroup et al\mbox.\egroup
+  }{2017}]{wu2017recurrent}
+Wu, C.-Y.; Ahmed, A.; Beutel, A.; Smola, A.~J.; and Jing, H.
+\newblock 2017.
+\newblock Recurrent recommender networks.
+\newblock In {\em Proceedings of the Tenth ACM International Conference on Web
+  Search and Data Mining},  495--503.
+\newblock ACM.
 
-\bibitem[\protect\citeauthoryear{Koren}{Koren}{2009}]%
-        {koren2009bellkor}
-\bibfield{author}{\bibinfo{person}{Yehuda Koren}.}
-  \bibinfo{year}{2009}\natexlab{}.
-\newblock \showarticletitle{The bellkor solution to the netflix grand prize}.
-\newblock \bibinfo{journal}{{\em Netflix prize documentation\/}}
-  \bibinfo{volume}{81} (\bibinfo{year}{2009}), \bibinfo{pages}{1--10}.
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Leskovec, Adamic, and Huberman}{Leskovec
-  et~al\mbox{.}}{2007}]%
-        {leskovec2007dynamics}
-\bibfield{author}{\bibinfo{person}{Jure Leskovec}, \bibinfo{person}{Lada~A
-  Adamic}, {and} \bibinfo{person}{Bernardo~A Huberman}.}
-  \bibinfo{year}{2007}\natexlab{}.
-\newblock \showarticletitle{The dynamics of viral marketing}.
-\newblock \bibinfo{journal}{{\em ACM Transactions on the Web (TWEB)\/}}
-  \bibinfo{volume}{1}, \bibinfo{number}{1} (\bibinfo{year}{2007}),
-  \bibinfo{pages}{5}.
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Melis, Dyer, and Blunsom}{Melis
-  et~al\mbox{.}}{2017}]%
-        {melis2017state}
-\bibfield{author}{\bibinfo{person}{G{\'a}bor Melis}, \bibinfo{person}{Chris
-  Dyer}, {and} \bibinfo{person}{Phil Blunsom}.}
-  \bibinfo{year}{2017}\natexlab{}.
-\newblock \showarticletitle{On the State of the Art of Evaluation in Neural
-  Language Models}.
-\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1707.05589\/}}
-  (\bibinfo{year}{2017}).
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Paszke, Gross, Chintala, et~al\mbox{.}}{Paszke
-  et~al\mbox{.}}{2017}]%
-        {paszke2017pytorch}
-\bibfield{author}{\bibinfo{person}{Adam Paszke}, \bibinfo{person}{Sam Gross},
-  \bibinfo{person}{Soumith Chintala}, {et~al\mbox{.}}}
-  \bibinfo{year}{2017}\natexlab{}.
-\newblock \bibinfo{title}{PyTorch}.
-\newblock   (\bibinfo{year}{2017}).
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Rendle, Freudenthaler, Gantner, and
-  Schmidt-Thieme}{Rendle et~al\mbox{.}}{2009}]%
-        {rendle2009bpr}
-\bibfield{author}{\bibinfo{person}{Steffen Rendle}, \bibinfo{person}{Christoph
-  Freudenthaler}, \bibinfo{person}{Zeno Gantner}, {and} \bibinfo{person}{Lars
-  Schmidt-Thieme}.} \bibinfo{year}{2009}\natexlab{}.
-\newblock \showarticletitle{BPR: Bayesian personalized ranking from implicit
-  feedback}. In \bibinfo{booktitle}{{\em Proceedings of the twenty-fifth
-  conference on uncertainty in artificial intelligence}}. AUAI Press,
-  \bibinfo{pages}{452--461}.
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Vilnis and McCallum}{Vilnis and
-  McCallum}{2014}]%
-        {vilnis2014word}
-\bibfield{author}{\bibinfo{person}{Luke Vilnis} {and} \bibinfo{person}{Andrew
-  McCallum}.} \bibinfo{year}{2014}\natexlab{}.
-\newblock \showarticletitle{Word Representations via Gaussian Embedding}.
-\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1412.6623\/}}
-  (\bibinfo{year}{2014}).
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Weston, Bengio, and Usunier}{Weston
-  et~al\mbox{.}}{2011}]%
-        {weston2011wsabie}
-\bibfield{author}{\bibinfo{person}{Jason Weston}, \bibinfo{person}{Samy
-  Bengio}, {and} \bibinfo{person}{Nicolas Usunier}.}
-  \bibinfo{year}{2011}\natexlab{}.
-\newblock \showarticletitle{Wsabie: Scaling up to large vocabulary image
-  annotation}. In \bibinfo{booktitle}{{\em IJCAI}}, Vol.~\bibinfo{volume}{11}.
-  \bibinfo{pages}{2764--2770}.
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Weston, Weiss, and Yee}{Weston
-  et~al\mbox{.}}{2013}]%
-        {weston2013nonlinear}
-\bibfield{author}{\bibinfo{person}{Jason Weston}, \bibinfo{person}{Ron~J
-  Weiss}, {and} \bibinfo{person}{Hector Yee}.} \bibinfo{year}{2013}\natexlab{}.
-\newblock \showarticletitle{Nonlinear latent factorization by embedding
-  multiple user interests}. In \bibinfo{booktitle}{{\em Proceedings of the 7th
-  ACM conference on Recommender systems}}. ACM, \bibinfo{pages}{65--68}.
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Wu, Ahmed, Beutel, Smola, and Jing}{Wu
-  et~al\mbox{.}}{2017}]%
-        {wu2017recurrent}
-\bibfield{author}{\bibinfo{person}{Chao-Yuan Wu}, \bibinfo{person}{Amr Ahmed},
-  \bibinfo{person}{Alex Beutel}, \bibinfo{person}{Alexander~J Smola}, {and}
-  \bibinfo{person}{How Jing}.} \bibinfo{year}{2017}\natexlab{}.
-\newblock \showarticletitle{Recurrent recommender networks}. In
-  \bibinfo{booktitle}{{\em Proceedings of the Tenth ACM International
-  Conference on Web Search and Data Mining}}. ACM, \bibinfo{pages}{495--503}.
-\newblock
-
-
-\bibitem[\protect\citeauthoryear{Zajac}{Zajac}{2017}]%
-        {goodbooks2017}
-\bibfield{author}{\bibinfo{person}{Zygmunt Zajac}.}
-  \bibinfo{year}{2017}\natexlab{}.
-\newblock \showarticletitle{Goodbooks-10K dataset}.
-\newblock
-  \bibinfo{howpublished}{\url{https://github.com/zygmuntz/goodbooks-10k}}.
-\newblock \bibinfo{journal}{{\em GitHub\/}} (\bibinfo{year}{2017}).
-\newblock
-
+\bibitem[\protect\citeauthoryear{Zajac}{2017}]{goodbooks2017}
+Zajac, Z.
+\newblock 2017.
+\newblock Goodbooks-10k dataset.
+\newblock {\em GitHub}.
 
 \end{thebibliography}
