@@ -1,43 +1,4 @@
-\documentclass[letterpaper]{article}
-\usepackage{aaai}
-\usepackage{times}
-\usepackage{helvet}
-\usepackage{courier}
-\usepackage{url}
-\usepackage{graphicx}
-\frenchspacing
-% Add additional packages here. The following
-% packages may NOT be used (this list
-% is not exhaustive:
-% authblk, caption, CJK, float, fullpage, geometry,
-%hyperref, layout, nameref, natbib, savetrees,
-%setspace, titlesec, tocbibind, ulem
-%
-
-%
-%
-% PDFINFO
-% You are required to complete the following
-% for pass-through to the PDF.
-% No LaTeX commands of any kind may be
-% entered. The parentheses and spaces
-% are an integral part of the
-% pdfinfo script and must not be removed.
-%
-\pdfinfo{
-/Title (Mixture-of-tastes Models for Representing Users with Diverse Interests)
-/Author (Maciej Kula)
-/Keywords (Recommender Systems, Matrix Factorization, Sequence-based Recommendations)
-}
-%
-%Section Numbers
-% Uncomment if you want to use section numbers
-% and change the 0 to a 1 or 2
-% \setcounter{secnumdepth}{0}
-% Title and Author Information Must Immediately Follow
-% the pdfinfo within the preamble
-%
-
+\documentclass[sigconf]{acmart}
 
 \usepackage{booktabs}
 \usepackage{subcaption}
@@ -66,50 +27,47 @@
 
 
 \title{Mixture-of-tastes Models for Representing Users with Diverse Interests}
-\author{Maciej Kula\\maciej.kula@gmail.com}
-%\email{maciej.kula@gmail.com}
+\author{Maciej Kula}
+\email{maciej.kula@gmail.com}
 \date{\today}
-%\settopmatter{printacmref=false, printccs=false, printfolios=true}
-%\setcopyright{none}
-%\acmConference[]{}{}{}
+\settopmatter{printacmref=false, printccs=false, printfolios=true}
+\setcopyright{none}
+\acmConference[]{}{}{}
 
-%% \begin{CCSXML}
-%% <ccs2012>
-%% <concept>
-%% <concept_id>10002951.10003260.10003261.10003269</concept_id>
-%% <concept_desc>Information systems~Collaborative filtering</concept_desc>
-%% <concept_significance>500</concept_significance>
-%% </concept>
-%% <concept>
-%% <concept_id>10002951.10003317.10003338.10003346</concept_id>
-%% <concept_desc>Information systems~Top-k retrieval in databases</concept_desc>
-%% <concept_significance>500</concept_significance>
-%% </concept>
-%% </ccs2012>
-%% \end{CCSXML}
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10002951.10003260.10003261.10003269</concept_id>
+<concept_desc>Information systems~Collaborative filtering</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10002951.10003317.10003338.10003346</concept_id>
+<concept_desc>Information systems~Top-k retrieval in databases</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
 
-%\ccsdesc[500]{Information systems~Collaborative filtering}
-% \ccsdesc[500]{Information systems~Top-k retrieval in databases}
+\ccsdesc[500]{Information systems~Collaborative filtering}
+\ccsdesc[500]{Information systems~Top-k retrieval in databases}
 
-% \keywords{Recommender Systems, Matrix Factorization, Sequence-based Recommendations}
-
-
-\maketitle
-
+%\keywords{Recommender Systems, Matrix Factorization, Sequence-based Recommendations}
 
 \begin{abstract}
 Most existing recommendation approaches implicitly treat user tastes as unimodal, resulting in an average-of-tastes representations when multiple distinct interests are present. We show that appropriately modelling the multi-faceted nature of user tastes through a mixture-of-tastes model leads to large increases in recommendation quality. Our result holds both for deep sequence-based and traditional factorization models, and is robust to careful selection and tuning of baseline models. In sequence-based models, this improvement is achieved at a very modest cost in model complexity, making mixture-of-tastes models a straightforward improvement on existing baselines.
 \end{abstract}
 
+\maketitle
 
 \section{Introduction}
-Latent vector-based recommender models commonly represent users with a single latent vector per user \citep{koren2009bellkor, hu2008collaborative}. This representation, while simple and efficient to compute, neglects the fact that users have diverse sub-tastes, and that observed user interactions can be seen as manifestations of several distinct tastes or intents. These may either be stable facets of the user's preference (liking both horror and documentary movies, or both bluegrass and classical music), context-driven changes (preference for short-form TV content during the week but long-form cinematography during the week-end), or manifestations of phenomena like account sharing, where two different users, with correspondingly different tastes, share the same user account.
+Latent vector-based recommender models commonly represent users with a single latent vector per user \citep{koren2009bellkor, hu2008collaborative}. This representation, while simple and efficient to compute, neglects the fact that users have diverse sub-tastes, and that observed user interactions can be seen as manifestations of several distinct tastes or intents. These may either be stable facets of the user's preference (liking both horror and documentary movies, or both bluegrass and classical music), context-driven changes (preference for short-form TV content during the week but long-form cinematography during the weekend), or manifestations of phenomena like account sharing, where two different users, with correspondingly different tastes, share the same user account.
 
-In all these cases, trying to capture the user's taste in a single latent vector is suboptimal. Firstly, it may lead to lack of nuance in representing the user, where a dominant taste may overpower more niche ones. Secondly it may reduce the quality of item representations, especially when it leads to decreasing the separation in the embedding space between groups of items belonging to multiple tastes or genres. For illustration, suppose that documentaries and horror movies are distinct genres, in the sense that most users prefer one or the other: but that there is still a group of users who like both. To represent that group of users, the genres' embeddings will have to be separated less cleanly than they would be if the model could express the concept of multiple tastes. In general, these problems are similar to that of fitting a unimodal distributional model to bimodal data; for Gaussians, the resulting fitted distribution will be a poor model of the data, and the majority of its density mass will coincide with neither of the true modes.
+In all these cases, trying to capture the user's taste in a single latent vector is suboptimal. Firstly, it may lead to lack of nuance in representing the user, where a dominant taste may overpower more niche ones. Secondly, it may reduce the quality of item representations, especially when it leads to decreasing the separation in the embedding space between groups of items belonging to multiple tastes or genres. For illustration, documentaries and horror movies are distinct genres in the sense that most users prefer one or the other, but there are still users who like both. To represent that group of users, the genres' embeddings will have to be separated less cleanly than they would be if the model could express the concept of multiple tastes. In general, these problems are similar to that of fitting a unimodal distributional model to bimodal data; for Gaussians, the resulting fitted distribution will be a poor model of the data, and the majority of its density mass will coincide with neither of the true modes.
 
 In this paper, we propose and evaluate representing users as mixtures of several distinct tastes, represented by distinct taste vectors. Each of the taste vectors is coupled with an attention vector, describing how competent it is at evaluating any given item. The user's preference is then modelled as a weighted average of all the user's tastes, with the weights given by how relevant each taste is to evaluating a given item.
 
-We apply this model to both traditional implicit feedback factorization models, and to more recent models using recurrent neural networks. In both cases, our mixture-of-interests models handily outperform single-representation models on standard ranking quality metrics. In the case of deep recurrent sequence models, this improvement is achieved at a very modest cost to to the model complexity, making our model a straightforward improvement over existing methods.
+We apply this model to both traditional implicit feedback factorization models, and to more recent models using recurrent neural networks. In both cases, our mixture-of-interests models outperform single-representation models on standard ranking quality metrics. In the case of deep recurrent sequence models, this improvement is achieved at a very modest cost to to the model complexity, making our model a straightforward improvement over existing methods.
 
 \section{Related work}
 The idea of moving beyond point embeddings has yielded some interesting results, particularly in the natural language modelling domain.
@@ -133,7 +91,7 @@ Formally, let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user
 \end{equation}
 where $b_j$ is the per-item bias term, $\sigma$ the elementwise sigmoid function, $\sigma\left(A_ie_j\right)$ gives the mixture probabilities, and $U_ie_j$ the recommendation scores given by each mixture component. We assume identity variance matrices for all mixture components.
 
-How $U_i$ and $A_i$ are obtained differs between the three evaluated models. In the M-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state $z_{it}$ of an LSTM layer trained on the user's previous interactions:
+How $U_i$ and $A_i$ are obtained differs betwen the three evaluated models. In the M-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state $z_{it}$ of an LSTM layer trained on the user's previous interactions:
 \begin{equation}
   \label{eq:lstm}
   z_{it} = \mathrm{LSTM}\left(e_{i1}, e_{i2}, \ldots, e_{it}\right).
@@ -195,7 +153,7 @@ For sequence-based models, we order all interactions chronologically, and split 
 
 We use mean reciprocal rank (MRR) as our measure of model quality. In factorization models, we use the user representations obtained from the training set to construct rankings over items in the test set. In sequence models, we use the last element of the test interaction sequence as the prediction target; the remaining elements are used to compute the user representation.
 
-We believe our sequence model experimental setting to be a relatively good reflection of the conditions in which industry recommender system are trained and evaluated: model retraining is often done daily, with data up to the day of training used for model estimation, and subsequent interactions used for evaluation. Insofar as this is true, our results should generalize well to real-world applications.
+We believe our sequence model experimental setting to be a relatively good reflection of the conditions in which industry recommender systems are trained and evaluated: model retraining is often done daily, with data up to the day of training used for model estimation, and subsequent interactions used for evaluation. Insofar as this is true, our results should generalize well to real-world applications.
 
 \subsection{Loss functions}
 We experiment with two loss functions:
@@ -218,27 +176,23 @@ Across all of our experiments, the adaptive maximum margin loss consistently out
 
 \subsection{Hyperparameter search}
 
-We perform extensive hyperparameter optimization across both our proposed models and all baselines. Our goal is two-fold. Firstly, we want to mitigate researcher bias, where more care and attention is devoted to the researcher's proposed model, thus unfairly disadvantaging baseline algorithms. We believe this to be a common phenomenon; its extent is illustrated, in a related domain, by \cite{melis2017state}, who find that standard LSTM architectures when properly tuned outperform more recent algorithms in natural laguage modelling tasks. Secondly, we wish to understand the extent to which the mixture-of-interests models are \emph{fragile}, in the sense of being highly sensitive to hyperparameter choices. Such fragile algorithms are potentially of lesser utility in industry applications, where the engineering cost of tuning in maintaing them may outweigh the accuracy benefits they bring.
+We perform extensive hyperparameter optimization across both our proposed models and all baselines. Our goal is two-fold. Firstly, we want to mitigate researcher bias, where more care and attention is devoted to the researcher's proposed model, thus unfairly disadvantaging baseline algorithms. We believe this to be a common phenomenon; its extent is illustrated, in a related domain, by \cite{melis2017state}, who find that standard LSTM architectures when properly tuned outperform more recent algorithms in natural laguage modelling tasks. Secondly, we wish to understand the extent to which the mixture-of-interests models are \emph{fragile}, in the sense of being highly sensitive to hyperparameter choices. Such fragile algorithms are potentially of lesser utility in industry applications, where the engineering cost of tuning and maintaing them may outweigh the accuracy benefits they bring.
 
-We use random search to tune the algorthms used in our experiments. We optimize batch size, number of training epochs, the learning rate, L2 regularization weight, the loss function, and (where appropriate) the number of taste mixture components.
+We use random search to tune the algorithms used in our experiments. We optimize batch size, number of training epochs, the learning rate, L2 regularization weight, the loss function, and (where appropriate) the number of taste mixture components.
 
 \subsection{Implementation}
 Our models are implemented using the PyTorch deep learning framework \citep{paszke2017pytorch} and trained using the nVidia K40 GPUs. All of the models are trained using the ADAM \citep{kingma2014adam} per-parameter learning rate schedule. We make the model and experiment code (as well as the full results) available on Github\footnote{\url{https://github.com/maciejkula/mixture}}.
 
 \section{Results}
 Our main results are summarized in Table \ref{tb:results}. In both sequence-based and factorization tasks, variants of our model achieve consistently higher performance than baseline models, with improvements ranging from 10\% to 69\%. The results are robust to optimizing the hyperparameters of our baselines, giving us ample confidence that the results can be replicated in production recommender systems.
-\begin{table}[htbp]
+\begin{table}
 \caption{Mean reciprocal rank across all users/sequences in the test set. Note that due to differences in experimental protocol, results between sequence-based and factorization models are not directly comparable.}
 \label{tb:results}
 \input{includes/performance.tex}
 \end{table}
 
+
 \subsection{Ranking quality}
-In sequence-based models, our M-LSTM model outperforms the baseline LSTM model on all datasets. The performance gains are particularly large on the Amazon (26\%) datset and Goodbooks (17\%) datasets, and smaller, but still meaningful, on the Movielens 10M dataset (10\%). This is consistent with our conjectures on the nature of the datasets. The Amazon dataset, spanning the entire catalog of Amazon products, benefits most from being able to model taste diversity. This is not surprising, given that a single Amazon user can interact with products from many disparate domains.
-
-Among factorization models, the Embedding Mixture model is the best performing model in two datasets. It beats the baseline model by a very substantial margin on the Amazon dataset (69\%), and by a smaller margin of 12\% on the Goodbooks dataset. There is relatively little to distinguish the models on the Movielens dataset, where all three models perform equally well. Somewhat surprisngly, the Projection Mixture model fails to outperform the baseline on two datasets, and substantially \emph{underperforms} it on the Amazon dataset. Given that the model is strictly more expressive than the baseline model, we attribute this failure to difficulties in effectively fitting the model.
-
-\subsection{Hyperparameter search}
   \begin{figure*}[h]
     \centering
     \captionsetup{width=.8\linewidth}
@@ -246,19 +200,21 @@ Among factorization models, the Embedding Mixture model is the best performing m
     \label{fig:hyper}
     \includegraphics[width=0.8\textwidth]{includes/hyperparam_search.pdf}
   \end{figure*}
+In sequence-based models, our M-LSTM model outperforms the baseline LSTM model on all datasets. The performance gains are particularly large on the Amazon (26\%) datset and Goodbooks (17\%) datasets, and smaller, but still meaningful, on the Movielens 10M dataset (10\%). This is consistent with our conjectures on the nature of the datasets. The Amazon dataset, spanning the entire catalog of Amazon products, benefits most from being able to model taste diversity. This is not surprising, given that a single Amazon user can interact with products from many disparate domains.
 
-Our results are robust to hyperparameter optimization. Figure~\ref{fig:hyper} plots the maximum test MRR achieved by each algorithm as a function of the number of elapsed hyperparameter search iterations. Both baseline and mixture models benefit from hyperparameter tuning. All algorithms converge to their optimum performance relatively quickly, suggesting a degree of robustness to hyperparameter choices. Mixture-LSTM and Embedding Mixture models quickly outperform their baseline counterparts, and maintain a stable performance lead thereafter. This lends support to our belief that the mixture models' superior accuracy reflects their greater capacity to model the recommendation problem well, rather than being an artifact of the experimental procedure or researcher bias.
+Among factorization models, the Embedding Mixture model is the best performing model in two datasets. It beats the baseline model by a very substantial margin on the Amazon dataset (69\%), and by a smaller margin of 12\% on the Goodbooks dataset. There is relatively little to distinguish the models on the Movielens dataset, where all three models perform equally well. Somewhat surprisingly, the Projection Mixture model fails to outperform the baseline on two datasets, and substantially \emph{underperforms} it on the Amazon dataset. Given that the model is strictly more expressive than the baseline model, we attribute this failure to difficulties in effectively fitting the model.
+
+\subsection{Hyperparameter search}
+Our results are robust to hyperparameter optimization. Figure~\ref{fig:hyper} plots the maximum test MRR achieved by each algorithm as a function of the number of elapsed hyperparameter search iterations. Both baseline and mixture models benefit from hyperparameter tuning. All algorithms converge to their optimum performance relatively quickly, suggesting a degree of robustness to hyperparameter choices. Mixture-LSTM and Embedding Mixture models quickly outperform their baseline counterparts, and maintain a stable performance lead thereafter (with the exception of the factorization Movielens experiments). This lends support to our belief that the mixture models' superior accuracy reflects their greater capacity to model the recommendation problem well, rather than being an artifact of the experimental procedure or researcher bias.
 
 \subsection{Number of taste components}
 \input{includes/hyperparameters.tex}
-We summarize the effect of increasing the number of taste mixture components in Table~\ref{tab:nummixtures}. By and large, there is a dose-response relationship between the number of mixtures and recommendation quality: being able to represents more distinct user tasts yields better results. The optimum number of components is dataset dependent: the (more diverse) Amazon and Goodbooks dataset tend to benefit more from additional expressiveness, while four mixture components seem to suffice in the more homogeneous Movielens dataset.
-
+We summarize the effect of increasing the number of taste mixture components in Table~\ref{tab:nummixtures}. The optimum number of components is dataset and algorithm dependent but, by and large, there is a dose-response relationship between the number of mixtures and recommendation quality: being able to represent more distinct user tastes yields better results.
 
 \section{Conclusion}
 We show that mixture-of-tastes representations are clear improvements over their baseline modes, especially in sequence-based settings where the accuracy gains come at a very modest cost in model complexity. We have taken care to test the mixture models against strong baselines, and have confidence that our approach can translate to accuracy gains in production recommender systems.
 
-
 \bibliography{bibliography}
-\bibliographystyle{aaai}
+\bibliographystyle{ACM-Reference-Format}
 
 \end{document}
