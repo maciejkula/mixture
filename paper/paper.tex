@@ -91,7 +91,7 @@ Formally, let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user
 \end{equation}
 where $b_j$ is the per-item bias term, $\sigma$ the elementwise sigmoid function, $\sigma\left(A_ie_j\right)$ gives the mixture probabilities, and $U_ie_j$ the recommendation scores given by each mixture component. We assume identity variance matrices for all mixture components.
 
-How $U_i$ and $A_i$ are obtained differs betwen the three evaluated models. In the M-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state $z_{it}$ of an LSTM layer trained on the user's previous interactions:
+How $U_i$ and $A_i$ are obtained differs between the three evaluated models. In the M-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state $z_{it}$ of an LSTM layer trained on the user's previous interactions:
 \begin{equation}
   \label{eq:lstm}
   z_{it} = \mathrm{LSTM}\left(e_{i1}, e_{i2}, \ldots, e_{it}\right).
@@ -129,7 +129,7 @@ We use the following datasets in our experiments (their summary statistics are l
 \item Goodbooks: dataset of 6 million ratings across 53,000 users and 10,000 most popular books from the Goodbooks online book recommendation and sharing service \citep{goodbooks2017}.
 \item Amazon: dataset of ratings and reviews gathered from the Amazon online shopping service, spanning books, music, and videos \citep{leskovec2007dynamics}. After pruning users and items with fewer than 10 ratings, the dataset contains approximately 4 million ratings from 100,000 users over 114,000 items.
 \end{enumerate}
-The two key differences betweeen the datasets are their sparsity and the degree to which they are popularity-biased. The Movielens 10M and Goodbooks datasets are relatively dense, while the Amazon dataset is much sparser. Popularity seems to play a greater role in the Movielens dataset than in the other datasets: the ratio between the number of interactions that accrue to the 95th percentile and the 50th percentile of most popular items is highest in Movielens 10M.
+The two key differences between the datasets are their sparsity and the degree to which they are popularity-biased. The Movielens 10M and Goodbooks datasets are relatively dense, while the Amazon dataset is much sparser. Popularity seems to play a greater role in the Movielens dataset than in the other datasets: the ratio between the number of interactions that accrue to the 95th percentile and the 50th percentile of most popular items is highest in Movielens 10M.
 
 We conjecture that taste diversity plays a lesser role in highly popularity-biased datasets (that is, where a large share of all interactions go to very few items). Intuitively, a single dominant taste can model such observations quite well; additional tastes only come into play in the long tail of the distribution. Conversely, a more even distribution of interactions between items allows the possibility that multiple tastes play a larger role. If this is true, we would expect the gains from our mixture models to be larger in the Amazon (where tastes can span multiple unrelated item categories) and Goodbooks (where the popularity distribution is relatively even by construction) datasets than in the Movielens dataset.
 
