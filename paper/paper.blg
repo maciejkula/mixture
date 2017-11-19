@@ -30,7 +30,7 @@ Warning--no number and no volume in goodbooks2017
 Warning--page numbers missing in both pages and numpages fields in goodbooks2017
 You've used 16 entries,
             5706 wiz_defined-function locations,
-            1391 strings with 17685 characters,
+            1391 strings with 17717 characters,
 and the built_in function-call counts, 17206 in all, are:
 = -- 2375
 > -- 654

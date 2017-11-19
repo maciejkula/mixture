@@ -215,10 +215,11 @@
         {goodbooks2017}
 \bibfield{author}{\bibinfo{person}{Zygmunt Zajac}.}
   \bibinfo{year}{2017}\natexlab{}.
-\newblock \showarticletitle{Goodbooks-10K dataset}.
+\newblock \showarticletitle{goodbooks-10k: a new dataset for book
+  recommendations}.
 \newblock
   \bibinfo{howpublished}{\url{https://github.com/zygmuntz/goodbooks-10k}}.
-\newblock \bibinfo{journal}{{\em GitHub\/}} (\bibinfo{year}{2017}).
+\newblock \bibinfo{journal}{{\em FastML\/}} (\bibinfo{year}{2017}).
 \newblock
 
 

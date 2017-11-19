@@ -126,7 +126,7 @@ We use the following datasets in our experiments (their summary statistics are l
 
 \begin{enumerate}
 \item Movielens 10M: dataset of 10 million movie ratings across 10,000 movies and 72,000 users \citep{harper2016movielens}.
-\item Goodbooks: dataset of 6 million ratings across 53,000 users and 10,000 most popular books from the Goodbooks online book recommendation and sharing service \citep{goodbooks2017}.
+\item Goodbooks-10K: dataset of 6 million ratings across 53,000 users and 10,000 most popular books from the Goodreads online book recommendation and sharing service \citep{goodbooks2017}.
 \item Amazon: dataset of ratings and reviews gathered from the Amazon online shopping service, spanning books, music, and videos \citep{leskovec2007dynamics}. After pruning users and items with fewer than 10 ratings, the dataset contains approximately 4 million ratings from 100,000 users over 114,000 items.
 \end{enumerate}
 The two key differences between the datasets are their sparsity and the degree to which they are popularity-biased. The Movielens 10M and Goodbooks datasets are relatively dense, while the Amazon dataset is much sparser. Popularity seems to play a greater role in the Movielens dataset than in the other datasets: the ratio between the number of interactions that accrue to the 95th percentile and the 50th percentile of most popular items is highest in Movielens 10M.
@@ -212,7 +212,7 @@ Our results are robust to hyperparameter optimization. Figure~\ref{fig:hyper} pl
 We summarize the effect of increasing the number of taste mixture components in Table~\ref{tab:nummixtures}. The optimum number of components is dataset and algorithm dependent but, by and large, there is a dose-response relationship between the number of mixtures and recommendation quality: being able to represent more distinct user tastes yields better results.
 
 \section{Conclusion}
-We show that mixture-of-tastes representations are clear improvements over their baseline modes, especially in sequence-based settings where the accuracy gains come at a very modest cost in model complexity. We have taken care to test the mixture models against strong baselines, and have confidence that our approach can translate to accuracy gains in production recommender systems.
+We show that mixture-of-tastes representations are clear improvements over their baseline modes, especially in sequence-based settings where the accuracy gains come at a very modest cost in model complexity. We have taken care to test the mixture models against strong baselines, and have confidence that our approach can translate to accuracy gains in production recommender systems. We believe that modelling the diversity of user tastes in this manner can become a standard component of recommendation algorithms.
 
 \bibliography{bibliography}
 \bibliographystyle{ACM-Reference-Format}
