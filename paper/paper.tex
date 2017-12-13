@@ -138,7 +138,15 @@ Throughout our experiments, we treat all datasets as implicit feedback datasets,
 \begin{table}
   \caption{Dataset statistics. 95th/50th denotes the ratio of popularity of the 95th and 50th percentile of item popularity.}
   \label{tab:datasets}
-  \input{includes/datasets.tex}
+\begin{tabularx}{\columnwidth}{lllrr}
+\toprule
+ Dataset       & Users   & Items   &   Density &   95th/50th \\
+\midrule
+ Movielens & 69,879  & 10,678  &    0.0134 &      7.42 \\
+ Amazon        & 100,085 & 113,997 &    0.0003 &      5.67 \\
+ Goodbooks     & 53,425  & 10,001  &    0.0112 &      1.41 \\
+\bottomrule
+\end{tabularx}
 \end{table}
 
 \subsection{Baselines}
@@ -188,7 +196,31 @@ Our main results are summarized in Table \ref{tb:results}. In both sequence-base
 \begin{table}
 \caption{Mean reciprocal rank across all users/sequences in the test set. Note that due to differences in experimental protocol, results between sequence-based and factorization models are not directly comparable.}
 \label{tb:results}
-\input{includes/performance.tex}
+\begin{subtable}{\columnwidth}
+\caption{Sequence models}
+\begin{tabularx}{\columnwidth}{lrrr}
+\toprule
+ Model        &   Movielens &   Amazon &   Goodbooks \\
+\midrule
+ LSTM         &          0.0908 &   0.1502 &      0.1158 \\
+ Mixture-LSTM &          \textbf{0.1001} &   \textbf{0.1889} &      \textbf{0.1358} \\
+\bottomrule
+\end{tabularx}
+\end{subtable}
+\hspace{\fill}
+\begin{subtable}{\columnwidth}
+\caption{Factorization models}
+\begin{tabularx}{\columnwidth}{lrrr}
+\toprule
+ Model              &   Movielens &   Amazon &   Goodbooks \\
+\midrule
+ Factorization           &          0.1053 &   0.1001 &      0.0738 \\
+ Projection Mixture &          \textbf{0.1097} &   0.0698 &      0.0712 \\
+ Embedding Mixture  &          0.1026 &   \textbf{0.1696} &      \textbf{0.0853} \\
+\bottomrule
+\end{tabularx}
+\end{subtable}
+
 \end{table}
 
 
@@ -198,7 +230,7 @@ Our main results are summarized in Table \ref{tb:results}. In both sequence-base
     \captionsetup{width=.8\linewidth}
     \caption{Maximum test MRR vs number of hyperparameter search iterations. Sequence-based models in the top row; factorization-based models in the bottom row.}
     \label{fig:hyper}
-    \includegraphics[width=0.8\textwidth]{includes/hyperparam_search.pdf}
+    \includegraphics[width=0.8\textwidth]{hyperparam_search.pdf}
   \end{figure*}
 In sequence-based models, our M-LSTM model outperforms the baseline LSTM model on all datasets. The performance gains are particularly large on the Amazon (26\%) datset and Goodbooks (17\%) datasets, and smaller, but still meaningful, on the Movielens 10M dataset (10\%). This is consistent with our conjectures on the nature of the datasets. The Amazon dataset, spanning the entire catalog of Amazon products, benefits most from being able to model taste diversity. This is not surprising, given that a single Amazon user can interact with products from many disparate domains.
 
@@ -208,7 +240,36 @@ Among factorization models, the Embedding Mixture model is the best performing m
 Our results are robust to hyperparameter optimization. Figure~\ref{fig:hyper} plots the maximum test MRR achieved by each algorithm as a function of the number of elapsed hyperparameter search iterations. Both baseline and mixture models benefit from hyperparameter tuning. All algorithms converge to their optimum performance relatively quickly, suggesting a degree of robustness to hyperparameter choices. Mixture-LSTM and Embedding Mixture models quickly outperform their baseline counterparts, and maintain a stable performance lead thereafter (with the exception of the factorization Movielens experiments). This lends support to our belief that the mixture models' superior accuracy reflects their greater capacity to model the recommendation problem well, rather than being an artifact of the experimental procedure or researcher bias.
 
 \subsection{Number of taste components}
-\input{includes/hyperparameters.tex}
+\begin{table}
+\caption{Effect of number of mixture components}
+\label{tab:nummixtures}
+\begin{subtable}{\columnwidth}
+\caption{Sequence models}
+\begin{tabularx}{\columnwidth}{rrrr}
+\toprule
+   Components &   Movielens 10M &   Amazon &   Goodbooks \\
+\midrule
+            2 &          0.0882 &   0.1538 &      0.1262 \\
+            4 &          0.0997 &   0.1689 &      0.1304 \\
+            6 &          0.0922 &   \textbf{0.1889} &      \textbf{0.1358} \\
+            8 &          \textbf{0.1001} &   0.1865 &      0.1327 \\
+\bottomrule
+\end{tabularx}
+\end{subtable}
+\hspace{\fill}
+\begin{subtable}{\columnwidth}
+\caption{Factorization models}
+\begin{tabularx}{\columnwidth}{rrrr}
+\toprule
+   Components &   Movielens 10M &   Amazon &   Goodbooks \\
+\midrule
+            2 &          0.0931 &   0.1343 &      0.0797 \\
+            4 &          \textbf{0.1026} &   0.1583 &      0.0840 \\
+            6 &          0.0864 &   0.1612 &      0.0811 \\
+            8 &          0.0879 &   \textbf{0.1696} &      \textbf{0.0853} \\
+\bottomrule
+\end{tabularx}
+\end{subtable}\end{table}
 We summarize the effect of increasing the number of taste mixture components in Table~\ref{tab:nummixtures}. The optimum number of components is dataset and algorithm dependent but, by and large, there is a dose-response relationship between the number of mixtures and recommendation quality: being able to represent more distinct user tastes yields better results.
 
 \section{Conclusion}
