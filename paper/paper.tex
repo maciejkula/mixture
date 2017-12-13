@@ -89,7 +89,7 @@ Formally, let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user
 \begin{equation}
   r_{ij} = \sigma\left(A_ie_j\right) \cdot U_ie_j + b_j,
 \end{equation}
-where $b_j$ is the per-item bias term, $\sigma$ the elementwise sigmoid function, $\sigma\left(A_ie_j\right)$ gives the mixture probabilities, and $U_ie_j$ the recommendation scores given by each mixture component. We assume identity variance matrices for all mixture components.
+where $b_j$ is the per-item bias term, $\sigma$ the elementwise sigmoid function, $\sigma\left(A_ie_j\right)$ gives the mixture probabilities, $U_ie_j$ the recommendation scores given by each mixture component, and $\cdot$ denotes the dot product. We assume identity variance matrices for all mixture components.
 
 How $U_i$ and $A_i$ are obtained differs between the three evaluated models. In the M-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state $z_{it}$ of an LSTM layer trained on the user's previous interactions:
 \begin{equation}
