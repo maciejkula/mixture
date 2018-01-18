@@ -89,18 +89,18 @@ Formally, let $U_i$ be a $m \times k$ matrix representing the $m$ tastes of user
 \begin{equation}
   r_{ij} = \sigma\left(A_ie_j\right) \cdot U_ie_j + b_j,
 \end{equation}
-where $b_j$ is the per-item bias term, $\sigma$ the elementwise sigmoid function, $\sigma\left(A_ie_j\right)$ gives the mixture probabilities, $U_ie_j$ the recommendation scores given by each mixture component, and $\cdot$ denotes the dot product. We assume identity variance matrices for all mixture components.
+where $b_j$ is the per-item bias term, $\sigma$ the softmax function, $\sigma\left(A_ie_j\right)$ gives the mixture probabilities, $U_ie_j$ the recommendation scores given by each mixture component, and $\cdot$ denotes the vector dot product. We assume identity variance matrices for all mixture components.
 
 How $U_i$ and $A_i$ are obtained differs between the three evaluated models. In the M-LSTM model, $U_{it}$ and $A_{it}$ (now indexed by $t$, their position in the sequence of interactions) are linear functions of the hidden state $z_{it}$ of an LSTM layer trained on the user's previous interactions:
 \begin{equation}
   \label{eq:lstm}
   z_{it} = \mathrm{LSTM}\left(e_{i1}, e_{i2}, \ldots, e_{it}\right).
 \end{equation}
-Given $z_{it}$, the $m$-th row of $U_{it}$ and $A_{it}$ are given by
+Given the $1 \times k$ dimensional hidden state $z_{it}$, the $m$-th row of $U_{it}$ and $A_{it}$ are given by
 \begin{equation}
 \begin{aligned}
-  u^m_{it} &= W^U_mz_{it} + B^U_m\\
-  a^m_{it} &= W^A_mz_{it} + B^A_m,\\
+  u^m_{it} &= z_{it}W^U_m + B^U_m\\
+  a^m_{it} &= z_{it}W^A_m + B^A_m,\\
 \end{aligned}
 \end{equation}
 where $W^U_m$, $W^A_M$ are the learned projection matrices, and $B^U_m$ and $B^A_m$ are bias terms. Both the projection matrices and the biases are common across all users, representing a modest increase in the total number of model parameters. Note that the LSTM network only needs to be run once to obtain the full user representation.
@@ -108,8 +108,8 @@ where $W^U_m$, $W^A_M$ are the learned projection matrices, and $B^U_m$ and $B^A
 The PM-F model is similar: an embedding $z_i$ is estimated for each user, and the $U_i$ and $A_i$ matrices are obtained via linear projections:
 \begin{equation}
 \begin{aligned}
-  u^m_{i} &= W^U_mz_{i} + B^U_m\\
-  a^m_{i} &= W^A_mz_{i} + B^A_m.\\
+  u^m_{i} &= z_{i}W^U_m + B^U_m\\
+  a^m_{i} &= z_{i}W^A_m + B^A_m.\\
 \end{aligned}
 \end{equation}
 This keeps the number of model parameters small at a potential cost to model capacity. In contrast, the EM-F model embeds $U_i$ and $A_i$ directly. This substantially increases the number of model parameters, but may lead to better accuracy.
