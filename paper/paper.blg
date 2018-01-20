@@ -20,6 +20,8 @@ Warning--empty publisher in rendle2009bpr
 Warning--empty address in rendle2009bpr
 Warning--no number and no volume in vilnis2014word
 Warning--page numbers missing in both pages and numpages fields in vilnis2014word
+Warning--no number and no volume in wang2017attention
+Warning--page numbers missing in both pages and numpages fields in wang2017attention
 Warning--empty publisher in weston2011wsabie
 Warning--empty address in weston2011wsabie
 Warning--empty publisher in weston2013nonlinear
@@ -28,45 +30,45 @@ Warning--empty publisher in wu2017recurrent
 Warning--empty address in wu2017recurrent
 Warning--no number and no volume in goodbooks2017
 Warning--page numbers missing in both pages and numpages fields in goodbooks2017
-You've used 16 entries,
+You've used 17 entries,
             5706 wiz_defined-function locations,
-            1391 strings with 17717 characters,
-and the built_in function-call counts, 17206 in all, are:
-= -- 2375
-> -- 654
+            1395 strings with 17877 characters,
+and the built_in function-call counts, 18188 in all, are:
+= -- 2534
+> -- 692
 < -- 0
-+ -- 202
-- -- 224
-* -- 1165
-:= -- 1759
-add.period$ -- 81
-call.type$ -- 16
-change.case$ -- 107
-chr.to.int$ -- 16
-cite$ -- 38
-duplicate$ -- 1334
-empty$ -- 991
-format.name$ -- 280
-if$ -- 4361
++ -- 214
+- -- 240
+* -- 1227
+:= -- 1861
+add.period$ -- 86
+call.type$ -- 17
+change.case$ -- 113
+chr.to.int$ -- 17
+cite$ -- 41
+duplicate$ -- 1401
+empty$ -- 1043
+format.name$ -- 300
+if$ -- 4621
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 65
-newline$ -- 164
-num.names$ -- 128
-pop$ -- 649
+missing$ -- 69
+newline$ -- 172
+num.names$ -- 136
+pop$ -- 685
 preamble$ -- 1
-purify$ -- 187
+purify$ -- 198
 quote$ -- 0
-skip$ -- 471
+skip$ -- 493
 stack$ -- 0
-substring$ -- 1045
-swap$ -- 108
+substring$ -- 1089
+swap$ -- 111
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 340
-warning$ -- 22
-while$ -- 115
+type$ -- 356
+warning$ -- 24
+while$ -- 123
 width$ -- 0
-write$ -- 307
-(There were 22 warnings)
+write$ -- 323
+(There were 24 warnings)

@@ -176,6 +176,17 @@
 \newblock
 
 
+\bibitem[\protect\citeauthoryear{Wang and Cho}{Wang and Cho}{2017}]%
+        {wang2017attention}
+\bibfield{author}{\bibinfo{person}{Tian Wang} {and} \bibinfo{person}{Kyunghyun
+  Cho}.} \bibinfo{year}{2017}\natexlab{}.
+\newblock \showarticletitle{Attention-based Mixture Density Recurrent Networks
+  for History-based Recommendation}.
+\newblock \bibinfo{journal}{{\em arXiv preprint arXiv:1709.07545\/}}
+  (\bibinfo{year}{2017}).
+\newblock
+
+
 \bibitem[\protect\citeauthoryear{Weston, Bengio, and Usunier}{Weston
   et~al\mbox{.}}{2011}]%
         {weston2011wsabie}
