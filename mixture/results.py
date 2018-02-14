@@ -278,7 +278,7 @@ def generate_dataset_table():
                           ('Amazon', get_amazon_dataset()),
                           ('Goodbooks', get_goodbooks_dataset())):
 
-        item_counts = dataset.tocoo().getnnz(axis=1)
+        item_counts = dataset.tocoo().getnnz(axis=0)
 
         print('Dataset {}, ratio: {:0,}'
               .format(name, np.percentile(item_counts, 95) / np.percentile(item_counts, 50)))
